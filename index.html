@@ -235,6 +235,7 @@
         justify-content: space-between;
         padding: 0 4px;
         z-index: 10000;
+        box-sizing: border-box;
       }
       #start-button {
         height: 32px;
@@ -365,8 +366,102 @@
         align-items: center;
         justify-content: center;
       }
+
+      /* Responsive Mobile Styles */
+      @media (max-width: 768px) {
+        body {
+            overflow-y: auto;
+        }
+        #desktop {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+            padding: 12px;
+            position: static;
+            height: auto;
+        }
+        .desktop-icon {
+            position: static;
+            width: auto;
+            flex-direction: row;
+            align-items: center;
+            background-color: var(--win-bg);
+            padding: 8px;
+            border: 1px solid var(--win-border-dark);
+            box-shadow: 1px 1px 0 1px var(--win-border-dark);
+        }
+        .desktop-icon:active {
+            border-color: var(--win-border-dark) var(--win-border-light) var(--win-border-light) var(--win-border-dark);
+            box-shadow: none;
+        }
+        .desktop-icon .icon-label {
+            color: black;
+            flex-grow: 1;
+            text-align: left;
+            font-size: 14px;
+            word-wrap: normal;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .desktop-icon.selected > .icon-label {
+            background-color: transparent;
+        }
+        .desktop-icon .icon-image {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 0;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .desktop-icon .cd {
+            width: 40px;
+            height: 40px;
+        }
+        .desktop-icon .cd-hole {
+            width: 12px;
+            height: 12px;
+        }
+
+        .window {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            max-height: none;
+            z-index: 5000;
+            box-shadow: none;
+            border: none;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .window-content {
+            height: calc(100% - 32px); /* Account for title bar */
+            border: none;
+            margin: 0;
+        }
+        .window-title-bar {
+            border-bottom: 2px solid var(--win-border-dark);
+        }
+
+        #start-menu {
+            width: 100vw;
+            box-sizing: border-box;
+            left: 0;
+            border-left: none;
+            border-right: none;
+        }
+        
+        #media-player {
+            width: auto;
+            left: 4px;
+            right: 4px;
+            bottom: 44px; /* Above taskbar */
+        }
+      }
     </style>
-<link rel="stylesheet" href="/index.css">
 </head>
 <body>
     <div id="app-container">
@@ -668,6 +763,8 @@
             let audio = null;
             let startMenu = null;
             
+            const isMobile = () => window.innerWidth <= 768;
+
             // --- Clock ---
             function updateClock() {
                 const now = new Date();
@@ -678,7 +775,7 @@
 
             // --- Generic Dragging Logic ---
             function startDrag(e, element) {
-                if (e.button !== 0) return;
+                if (isMobile() || e.button !== 0) return;
                 draggedElement = element;
                 draggedElement.style.zIndex = ++highestZ;
 
@@ -723,21 +820,33 @@
             albums.forEach((album, index) => {
                 const iconElement = iconTemplate.content.cloneNode(true).firstElementChild;
                 iconElement.querySelector('.icon-label').textContent = album.albumTitle;
-                const gridX = index % 10;
-                const gridY = Math.floor(index / 10);
-                iconElement.style.left = `${gridX * 90 + 20}px`;
-                iconElement.style.top = `${gridY * 110 + 20}px`;
+                
+                if (!isMobile()) {
+                    const gridX = index % 10;
+                    const gridY = Math.floor(index / 10);
+                    iconElement.style.left = `${gridX * 90 + 20}px`;
+                    iconElement.style.top = `${gridY * 110 + 20}px`;
+                }
+
+                // Desktop: drag with mousedown, open with dblclick
                 iconElement.addEventListener('mousedown', (e) => {
-                    if (e.button !== 0) return;
+                    if (isMobile() || e.button !== 0) return;
                     deselectAllIcons();
                     iconElement.classList.add('selected');
                     startDrag(e, iconElement);
                     e.stopPropagation(); 
                 });
                 iconElement.addEventListener('dblclick', (e) => {
-                    if (e.button !== 0) return;
+                    if (isMobile() || e.button !== 0) return;
                     openWindow(album);
                 });
+
+                // Mobile: open with a single click/tap
+                iconElement.addEventListener('click', () => {
+                    if (!isMobile()) return;
+                    openWindow(album);
+                });
+
                 desktop.appendChild(iconElement);
             });
 
@@ -783,9 +892,12 @@
                     trackListEl.appendChild(li);
                 });
 
-                const openWindows = document.querySelectorAll('.window').length;
-                windowEl.style.left = `${50 + openWindows * 30}px`;
-                windowEl.style.top = `${50 + openWindows * 30}px`;
+                if (!isMobile()) {
+                    const openWindows = document.querySelectorAll('.window').length;
+                    windowEl.style.left = `${50 + openWindows * 30}px`;
+                    windowEl.style.top = `${50 + openWindows * 30}px`;
+                }
+                
                 windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
                 const titleBar = windowEl.querySelector('.window-title-bar');
                 titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
@@ -808,10 +920,12 @@
                 } else {
                     windowEl = notepadTemplate.content.cloneNode(true).firstElementChild;
                     windowEl.id = windowId;
-
-                    const openWindows = document.querySelectorAll('.window').length;
-                    windowEl.style.left = `${70 + openWindows * 30}px`;
-                    windowEl.style.top = `${70 + openWindows * 30}px`;
+                    
+                    if (!isMobile()) {
+                        const openWindows = document.querySelectorAll('.window').length;
+                        windowEl.style.left = `${70 + openWindows * 30}px`;
+                        windowEl.style.top = `${70 + openWindows * 30}px`;
+                    }
                     
                     windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
                     const titleBar = windowEl.querySelector('.window-title-bar');
@@ -907,6 +1021,8 @@
             });
 
             desktop.addEventListener('mousedown', (e) => {
+                // For mobile, e.target will be the desktop container itself in the list view
+                // For desktop, it's the empty space.
                 if (e.target === desktop) {
                     deselectAllIcons();
                     if(startMenu) {
@@ -917,6 +1033,5 @@
             });
         });
     </script>
-<script type="module" src="/index.tsx"></script>
 </body>
 </html>
