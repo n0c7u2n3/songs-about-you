@@ -1,0 +1,922 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Songs About You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&family=Jersey+25&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --win-bg: #c0c0c0;
+        --win-border-light: #ffffff;
+        --win-border-dark: #808080;
+        --win-border-black: #000000;
+        --title-bar-active: #000080;
+        --title-bar-inactive: #808080;
+        --desktop-bg: #008080;
+      }
+
+      body {
+        font-family: 'Jersey 25', sans-serif;
+        background-color: var(--desktop-bg);
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        margin: 0;
+        user-select: none;
+      }
+
+      #app-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      #desktop {
+        flex-grow: 1;
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+
+      /* Outset Border Style */
+      .border-outset {
+        border: 2px solid;
+        border-color: var(--win-border-light) var(--win-border-black) var(--win-border-black) var(--win-border-light);
+        box-shadow: 1px 1px 0 1px var(--win-border-dark);
+      }
+      .border-outset:active {
+        border-color: var(--win-border-dark) var(--win-border-light) var(--win-border-light) var(--win-border-dark);
+        box-shadow: none;
+      }
+
+      /* Inset Border Style */
+      .border-inset {
+        border: 2px solid;
+        border-color: var(--win-border-dark) var(--win-border-light) var(--win-border-light) var(--win-border-dark);
+      }
+
+      /* Desktop Icon */
+      .desktop-icon {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 80px;
+        cursor: pointer;
+        padding: 4px;
+      }
+      .desktop-icon .icon-image {
+        position: relative;
+        width: 64px;
+        height: 64px;
+        margin-bottom: 8px;
+      }
+      .desktop-icon .jewel-case {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(2px);
+        padding: 4px;
+        border: 1px solid #777;
+        display: flex;
+      }
+      .desktop-icon .spine {
+        width: 6px;
+        height: 100%;
+        background-color: rgba(50, 50, 50, 0.7);
+      }
+      .desktop-icon .cd-area {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .desktop-icon .cd {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #a7b5d1, #7c89a7, #d4dcf0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+      }
+      .desktop-icon .cd-hole {
+        width: 16px;
+        height: 16px;
+        background: var(--win-bg);
+        border-radius: 50%;
+        border: 2px solid #aaa;
+      }
+      .desktop-icon .icon-label {
+        color: white;
+        text-align: center;
+        font-size: 12px;
+        padding: 1px 3px;
+        word-wrap: break-word;
+      }
+      .desktop-icon.selected > .icon-label {
+        background-color: var(--title-bar-active);
+      }
+
+      /* Window */
+      .window {
+        position: absolute;
+        width: 450px;
+        min-width: 250px;
+        max-height: 400px;
+        background-color: var(--win-bg);
+        padding: 4px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .window-title-bar {
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4px;
+        color: white;
+        font-weight: bold;
+        cursor: grab;
+      }
+      .window-title-bar.active { background-color: var(--title-bar-active); }
+      .window-title-bar.inactive { background-color: var(--title-bar-inactive); color: #c0c0c0;}
+
+      .window-title-bar:active { cursor: grabbing; }
+
+      .window-title-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .window-controls {
+        display: flex;
+      }
+
+      .window-controls button {
+        width: 20px;
+        height: 20px;
+        background-color: var(--win-bg);
+        margin-left: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .window-content {
+        flex-grow: 1;
+        margin-top: 4px;
+        background: white;
+        padding: 4px;
+        overflow-y: auto;
+      }
+      .window-content ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        color: black;
+        font-size: 14px;
+      }
+      .window-content li {
+        display: flex;
+        padding: 2px 4px;
+      }
+      .window-content li.has-preview:hover {
+        background-color: var(--title-bar-active);
+        color: white;
+        cursor: pointer;
+      }
+      .window-content .track-number {
+        width: 32px;
+        flex-shrink: 0;
+        text-align: right;
+        margin-right: 8px;
+      }
+      
+      /* Notepad styles */
+      .window-content.notepad {
+          padding: 0;
+          height: 100%;
+      }
+      .notepad-textarea {
+          width: 100%;
+          height: 100%;
+          box-sizing: border-box;
+          border: none;
+          resize: none;
+          background-color: white;
+          color: black;
+          font-family: monospace;
+          font-size: 14px;
+          padding: 4px;
+      }
+      .notepad-textarea:focus {
+          outline: none;
+      }
+
+      /* Taskbar */
+      #taskbar {
+        width: 100%;
+        height: 40px;
+        background-color: var(--win-bg);
+        border-top: 2px solid var(--win-border-light);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4px;
+        z-index: 10000;
+      }
+      #start-button {
+        height: 32px;
+        width: 90px;
+        background-color: var(--win-bg);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0 4px;
+        font-family: 'Pixelify Sans', sans-serif;
+      }
+      #start-button img {
+        height: 24px;
+        width: 24px;
+        margin-right: 4px;
+        image-rendering: pixelated;
+      }
+      #start-button span {
+        font-weight: bold;
+        font-size: 14px;
+        color: black;
+      }
+      #clock {
+        height: 32px;
+        padding: 0 8px;
+        display: flex;
+        align-items: center;
+        color: black;
+        font-size: 14px;
+      }
+
+      /* Start Menu */
+      #start-menu {
+        position: absolute;
+        bottom: 40px;
+        left: 0;
+        width: 250px;
+        background-color: var(--win-bg);
+        padding: 4px;
+        z-index: 10001;
+        display: flex;
+        flex-direction: column;
+      }
+      #start-menu a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: black;
+        padding: 8px;
+        font-size: 14px;
+      }
+      #start-menu a:hover {
+        background-color: var(--title-bar-active);
+        color: white;
+      }
+      #start-menu img {
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+        image-rendering: pixelated;
+      }
+      .start-menu-separator {
+        height: 0;
+        border-top: 1px solid var(--win-border-dark);
+        border-bottom: 1px solid var(--win-border-light);
+        margin: 4px;
+      }
+
+
+      /* Media Player */
+      #media-player {
+        position: fixed;
+        bottom: 50px;
+        right: 10px;
+        width: 280px;
+        background-color: var(--win-bg);
+        padding: 4px;
+        z-index: 9999;
+        display: none;
+        flex-direction: column;
+      }
+      #media-player.visible {
+        display: flex;
+      }
+      #player-title, #player-song-name {
+        color: black;
+        font-size: 12px;
+        padding: 2px 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      #player-song-name {
+          font-weight: bold;
+      }
+      .player-controls {
+          display: flex;
+          align-items: center;
+          margin-top: 4px;
+      }
+      .player-controls button {
+        width: 24px;
+        height: 24px;
+        background-color: var(--win-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #player-progress-bar {
+          flex-grow: 1;
+          height: 20px;
+          margin-left: 4px;
+          background-color: white;
+      }
+      #player-progress {
+          width: 0%;
+          height: 100%;
+          background-color: var(--title-bar-active);
+      }
+      #player-close {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 20px;
+        height: 20px;
+        background-color: var(--win-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="app-container">
+        <main id="desktop"></main>
+        <footer id="taskbar">
+            <button id="start-button" class="border-outset">
+                <img src="https://win98icons.alexmeub.com/icons/png/windows-0.png" alt="Start" />
+                <span>Start</span>
+            </button>
+            <div id="clock" class="border-inset">
+                <span id="time"></span>
+            </div>
+        </footer>
+    </div>
+
+    <template id="icon-template">
+        <div class="desktop-icon">
+            <div class="icon-image">
+                <div class="jewel-case">
+                    <div class="spine"></div>
+                    <div class="cd-area">
+                        <div class="cd">
+                            <div class="cd-hole"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span class="icon-label"></span>
+        </div>
+    </template>
+
+    <template id="window-template">
+        <div class="window border-outset">
+            <div class="window-title-bar">
+                <span class="window-title-text"></span>
+                <div class="window-controls">
+                    <button class="border-outset" title="Minimize" disabled>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                    <button class="border-outset" title="Maximize" disabled>
+                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg>
+                    </button>
+                    <button class="window-close-btn border-outset" title="Close">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content border-inset">
+                <ul class="track-list"></ul>
+            </div>
+        </div>
+    </template>
+
+    <template id="notepad-template">
+        <div class="window border-outset" style="height: 300px;">
+            <div class="window-title-bar">
+                <span class="window-title-text">Untitled - Notepad</span>
+                <div class="window-controls">
+                    <button class="border-outset" title="Minimize" disabled>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                    <button class="border-outset" title="Maximize" disabled>
+                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg>
+                    </button>
+                    <button class="window-close-btn border-outset" title="Close">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content border-inset notepad">
+                <textarea class="notepad-textarea" spellcheck="false"></textarea>
+            </div>
+        </div>
+    </template>
+    
+    <template id="media-player-template">
+        <div id="media-player" class="border-outset">
+            <div id="player-title">Now Playing...</div>
+            <div id="player-song-name"></div>
+            <div class="player-controls">
+                <button id="player-play-pause" class="border-outset">
+                    <svg id="play-icon" width="12" height="12" viewBox="0 0 12 12" fill="black"><path d="M3 2L9 6L3 10V2Z"/></svg>
+                    <svg id="pause-icon" style="display: none;" width="12" height="12" viewBox="0 0 12 12" fill="black"><path d="M3 2H5V10H3V2ZM7 2H9V10H7V2Z"/></svg>
+                </button>
+                <div id="player-progress-bar" class="border-inset">
+                    <div id="player-progress"></div>
+                </div>
+            </div>
+             <button id="player-close" class="border-outset" title="Close">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+            </button>
+        </div>
+    </template>
+
+    <template id="start-menu-template">
+      <div id="start-menu" class="border-outset">
+        <a href="#" onclick="openNotepad(event); return false;">
+            <img src="https://win98icons.alexmeub.com/icons/png/notepad-0.png" alt="Notepad" />
+            <span>Notes</span>
+        </a>
+        <a href="#" onclick="event.preventDefault(); return false;">
+            <img src="https://win98icons.alexmeub.com/icons/png/users-1.png" alt="Chatrooms" />
+            <span>Chatrooms</span>
+        </a>
+        <a href="#" onclick="event.preventDefault(); return false;">
+            <img src="https://win98icons.alexmeub.com/icons/png/help_book_big-1.png" alt="Guestbook" />
+            <span>Guestbook</span>
+        </a>
+        <div class="start-menu-separator"></div>
+        <a href="https://saypodcast.com" target="_blank">
+            <img src="https://win98icons.alexmeub.com/icons/png/microphone_2-1.png" alt="Internet" />
+            <span>saypodcast.com</span>
+        </a>
+        <div class="start-menu-separator"></div>
+        <a href="#" onclick="event.preventDefault(); return false;">
+            <img src="https://win98icons.alexmeub.com/icons/png/shut_down_cool-4.png" alt="Shut Down" />
+            <span>Shut Down...</span>
+        </a>
+      </div>
+    </template>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const previewUrls = [
+                "https://audio.jukehost.co.uk/4PdvbbpsRsua2yHB3LPWXlu6NhjIlx3s",
+                "https://audio.jukehost.co.uk/VmqnQJKSdlL4BaHyW2gJUOJgI5huQLLG",
+                "https://audio.jukehost.co.uk/GQetsVFQ8URoQT2qkbBwwkRjg9kB7IE0",
+                "https://audio.jukehost.co.uk/uVi0Ph3bA7Qe2JzgNHwqsrEbcJTFOzVM",
+                "https://audio.jukehost.co.uk/4A1Rkjkyy1cwyPD340W64LKutgq2RVj8",
+                "https://audio.jukehost.co.uk/Hs7P8oaHxkWwToOAxHrUZFBp32XNGH8k",
+                "https://audio.jukehost.co.uk/gVqBncKhAx2pgcZcb00wztePEKjMiiHr",
+                "https://audio.jukehost.co.uk/bBFSKlFW2V8QpRzYi3qLgrltlltzBs1a",
+                "https://audio.jukehost.co.uk/NECL7RqgG4fCAxiO4b2OAh6r7kSU8GI2",
+                "https://audio.jukehost.co.uk/F6qxHNX1m80Sm1g5bM6BKL630pM1TWNT",
+                "https://audio.jukehost.co.uk/6KwnbTWOxb6jzJ430uDyiGd4sKABUgUF",
+                "http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/menu.ogg",
+                "http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/race1.ogg",
+                "http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/race2.ogg",
+                "http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/race3.ogg",
+            ];
+
+            const albums = [
+                { bandName: "Episode 1", albumTitle: "Songs About Brock", tracks: [
+                    { trackNumber: 1, title: "I'm Yours – Jason Mraz" },
+                    { trackNumber: 2, title: "Swing Life Away – Rise Against" },
+                    { trackNumber: 3, title: "So Contagious – Acceptance" },
+                    { trackNumber: 4, title: "Drive – Incubus" },
+                    { trackNumber: 5, title: "Wonderwall (Remastered) – Oasis" },
+                    { trackNumber: 6, title: "Sex & Candy – Marcy Playground" },
+                    { trackNumber: 7, title: "Work – Jimmy Eat World" },
+                    { trackNumber: 8, title: "If You Could Only See – Tonic" },
+                    { trackNumber: 9, title: "Hello – Adele" },
+                    { trackNumber: 10, title: "Someday You Will Be Loved – Death Cab for Cutie" },
+                    { trackNumber: 11, title: "The Boy Who Blocked His Own Shot – Brand New" }
+                ]},
+                { bandName: "Episode 2", albumTitle: "Songs About Jessica", tracks: [
+                    { trackNumber: 1, title: "Como La Flor – Selena" },
+                    { trackNumber: 2, title: "Boyfriend – Best Coast" },
+                    { trackNumber: 3, title: "We Sink – CHVRCHES" },
+                    { trackNumber: 4, title: "Want You Back – HAIM" },
+                    { trackNumber: 5, title: "Dreams - 2004 Remaster – Fleetwood Mac" },
+                    { trackNumber: 6, title: "Cranes in the Sky – Solange" },
+                    { trackNumber: 7, title: "Location – Khalid" },
+                    { trackNumber: 8, title: "Salad Days – Mac DeMarco" },
+                    { trackNumber: 9, title: "Warm Thoughts – Flume" },
+                    { trackNumber: 10, title: "California English – Vampire Weekend" },
+                    { trackNumber: 11, title: "Stop the Fu*king Car – Circa Survive" },
+                    { trackNumber: 12, title: "Yes I'm Changing – Tame Impala" },
+                    { trackNumber: 13, title: "Chamber Of Reflection – Mac DeMarco" }
+                ]},
+                { bandName: "Episode 3", albumTitle: "Songs About Peter", tracks: [
+                    { trackNumber: 1, title: "Mother & Father – BROODS" },
+                    { trackNumber: 2, title: "I Love You – Faith Evans" },
+                    { trackNumber: 3, title: "Bad Religion – Frank Ocean" },
+                    { trackNumber: 4, title: "I Wanna Be Yours – Arctic Monkeys" },
+                    { trackNumber: 5, title: "When The Sun Don't Shine – Best Coast" },
+                    { trackNumber: 6, title: "Ivy – Frank Ocean" },
+                    { trackNumber: 7, title: "Cada Que... – Belanova" },
+                    { trackNumber: 8, title: "Lies – MARINA" },
+                    { trackNumber: 9, title: "Try – The xx" },
+                    { trackNumber: 10, title: "Not In That Way – Sam Smith" },
+                    { trackNumber: 11, title: "iT's YoU – ZAYN" },
+                    { trackNumber: 12, title: "Good Thing – Sam Smith" },
+                    { trackNumber: 13, title: "With Every Heartbeat – Robyn, Kleerup" },
+                    { trackNumber: 14, title: "Cobarde – Selena" },
+                    { trackNumber: 15, title: "Golden – Jill Scott" }
+                ]},
+                { bandName: "Episode 4", albumTitle: "Songs About Jess", tracks: [
+                    { trackNumber: 1, title: "Other Voices – The Orwells" },
+                    { trackNumber: 2, title: "Mallrats - Audiotree Live Session – The Orwells" },
+                    { trackNumber: 3, title: "Clash the Truth – Beach Fossils" },
+                    { trackNumber: 4, title: "Maxed out on Distractions – Corners" },
+                    { trackNumber: 5, title: "Lets Go Surfing – The Drums" },
+                    { trackNumber: 6, title: "Why Don't You Lie? – The King Khan & BBQ Show" },
+                    { trackNumber: 7, title: "Your Graduation – Modern Baseball" },
+                    { trackNumber: 8, title: "Secret Society – Title Fight" },
+                    { trackNumber: 9, title: "Bad Apple – Basement" },
+                    { trackNumber: 10, title: "Dog – Wavves" },
+                    { trackNumber: 11, title: "I'll Never Belong – The King Khan & BBQ Show" },
+                    { trackNumber: 12, title: "Hit & Run – King Tuff" },
+                    { trackNumber: 13, title: "Girl Afraid - 2011 Remaster – The Smiths" },
+                    { trackNumber: 14, title: "Derailed – Joyce Manor" },
+                    { trackNumber: 15, title: "Beach Community – Joyce Manor" },
+                    { trackNumber: 16, title: "Someday – The Growlers" }
+                ]},
+                { bandName: "Episode 5", albumTitle: "Songs About Paige", tracks: [
+                    { trackNumber: 1, title: "Come On Eileen – Dexys Midnight Runners" },
+                    { trackNumber: 2, title: "Read My Mind – The Killers" },
+                    { trackNumber: 3, title: "Nearly Witches (Ever Since We Met...) – Panic! At The Disco" },
+                    { trackNumber: 4, title: "I Went To The Store One Day – Father John Misty" },
+                    { trackNumber: 5, title: "Medicine – The 1975" },
+                    { trackNumber: 6, title: "Jackie and Wilson – Hozier" },
+                    { trackNumber: 7, title: "Fallingforyou – The 1975" },
+                    { trackNumber: 8, title: "King Kunta – Kendrick Lamar" },
+                    { trackNumber: 9, title: "Chateau Lobby #4 (in C for Two Virgins) – Father John Misty" },
+                    { trackNumber: 10, title: "Heavy Feet – Local Natives" },
+                    { trackNumber: 11, title: "You're Gonna Live Forever in Me – John Mayer" },
+                    { trackNumber: 12, title: "Romeo And Juliet – The Killers" },
+                    { trackNumber: 13, title: "Can't Help Falling in Love – Haley Reinhart" },
+                    { trackNumber: 14, title: "Northern Wind – City and Colour" },
+                    { trackNumber: 15, title: "Falling Slowly – Glen Hansard, Markéta Irglová" },
+                    { trackNumber: 16, title: "A Lack Of Color – Death Cab for Cutie" },
+                    { trackNumber: 17, title: "Re: Stacks – Bon Iver" }
+                ]},
+                { bandName: "Episode 6", albumTitle: "Songs About Henry", tracks: [
+                    { trackNumber: 1, title: "Tonight I'm Getting Over You – Carly Rae Jepsen" },
+                    { trackNumber: 2, title: "Happy Idiot – TV On The Radio" },
+                    { trackNumber: 3, title: "Elastic Heart – Sia" },
+                    { trackNumber: 4, title: "Details in the Fabric (feat. James Morrison) – Jason Mraz, James Morrison" },
+                    { trackNumber: 5, title: "Up&Up – Coldplay" },
+                    { trackNumber: 6, title: "Everglow – Coldplay" },
+                    { trackNumber: 7, "title": "Clean – Taylor Swift" },
+                    { trackNumber: 8, "title": "Shutter Island – Jessie Reyez" },
+                    { trackNumber: 9, "title": "FIGURES – Jessie Reyez" },
+                    { trackNumber: 10, title: "Last Goodbye – Kesha" },
+                    { trackNumber: 11, title: "Goodbye to You – Michelle Branch" },
+                    { trackNumber: 12, title: "We Don't Talk Anymore (feat. Selena Gomez) – Charlie Puth, Selena Gomez" },
+                    { trackNumber: 13, title: "He Wasn't – Avril Lavigne" },
+                    { trackNumber: 14, title: "Ghost – Katy Perry" },
+                    { trackNumber: 15, title: "Emoji of a Wave – John Mayer" }
+                ]},
+                { bandName: "Episode 7", albumTitle: "Songs About Owen", tracks: [
+                    { trackNumber: 1, title: "Archie, Marry Me – Alvvays" },
+                    { trackNumber: 2, title: "Someday – The Growlers" },
+                    { trackNumber: 3, title: "I Belong in Your Arms – Chairlift" },
+                    { trackNumber: 4, title: "Chateau Lobby #4 (in C for Two Virgins) – Father John Misty" },
+                    { trackNumber: 5, title: "Love On Top – Beyoncé" },
+                    { trackNumber: 6, title: "Talking Backwards – Real Estate" },
+                    { trackNumber: 7, title: "So Good At Being in Trouble – Unknown Mortal Orchestra" },
+                    { trackNumber: 8, title: "Down By The Water – The Drums" },
+                    { trackNumber: 9, title: "Warm Water – BANKS" },
+                    { trackNumber: 10, title: "for him. – Troye Sivan, Allday" }
+                ]},
+                { bandName: "Episode 8", albumTitle: "Songs About Justin", tracks: [
+                    { trackNumber: 1, title: "Magnetism – Vacationer" },
+                    { trackNumber: 2, title: "Broken Clocks – SZA" },
+                    { trackNumber: 3, title: "No Love Allowed – Rihanna" },
+                    { trackNumber: 4, title: "Curious – Hayley Kiyoko" },
+                    { trackNumber: 5, title: "Closer – Tegan and Sara" },
+                    { trackNumber: 6, title: "Velvet Elvis – Kacey Musgraves" },
+                    { trackNumber: 7, title: "Femmebot (feat. Dorian Electra and Mykki Blanco) – Charli xcx, Dorian Electra, Mykki Blanco" },
+                    { trackNumber: 8, title: "Tiny Little Bows – Carly Rae Jepsen" },
+                    { trackNumber: 9, title: "Dreams – The Cranberries" },
+                    { trackNumber: 10, title: "Twerkin!!! (feat. Diplo & Sissy Nobby) – Kreayshawn, Diplo, Sissy Nobby" },
+                    { trackNumber: 11, title: "Better Off – Ashlee Simpson" },
+                    { trackNumber: 12, title: "Shakespeare – Miranda Cosgrove" },
+                    { trackNumber: 13, title: "Cool People – Chloe x Halle" },
+                    { trackNumber: 14, title: "Don't You Pretend – Kelly Clarkson" },
+                    { trackNumber: 15, title: "Rock the Boat – Hues Corporation" },
+                    { trackNumber: 16, title: "Flower Tattoo – Mind Bath, Forever" },
+                    { trackNumber: 17, title: "Delicate – Taylor Swift" },
+                    { trackNumber: 18, title: "Brick by Boring Brick – Paramore" }
+                ]}
+            ];
+            
+            let trackCounter = 0;
+            albums.forEach(album => {
+                album.tracks.forEach(track => {
+                    track.previewUrl = previewUrls[trackCounter++ % previewUrls.length];
+                });
+            });
+
+            const desktop = document.getElementById('desktop');
+            const timeEl = document.getElementById('time');
+            const startButton = document.getElementById('start-button');
+            const iconTemplate = document.getElementById('icon-template');
+            const windowTemplate = document.getElementById('window-template');
+            const mediaPlayerTemplate = document.getElementById('media-player-template');
+            const startMenuTemplate = document.getElementById('start-menu-template');
+            const notepadTemplate = document.getElementById('notepad-template');
+
+            let highestZ = 10;
+            let draggedElement = null;
+            let dragOffsetX = 0;
+            let dragOffsetY = 0;
+            let activeWindow = null;
+            let mediaPlayer = null;
+            let audio = null;
+            let startMenu = null;
+            
+            // --- Clock ---
+            function updateClock() {
+                const now = new Date();
+                timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+            updateClock();
+            setInterval(updateClock, 1000);
+
+            // --- Generic Dragging Logic ---
+            function startDrag(e, element) {
+                if (e.button !== 0) return;
+                draggedElement = element;
+                draggedElement.style.zIndex = ++highestZ;
+
+                const rect = draggedElement.getBoundingClientRect();
+                dragOffsetX = e.clientX - rect.left;
+                dragOffsetY = e.clientY - rect.top;
+                
+                if (draggedElement.classList.contains('window')) {
+                    draggedElement.querySelector('.window-title-bar').style.cursor = 'grabbing';
+                }
+
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('mouseup', stopDrag, { once: true });
+            }
+
+            function drag(e) {
+                if (!draggedElement) return;
+                const parentRect = desktop.getBoundingClientRect();
+                let x = e.clientX - dragOffsetX;
+                let y = e.clientY - dragOffsetY;
+                x = Math.max(0, Math.min(x, parentRect.width - draggedElement.offsetWidth));
+                y = Math.max(0, Math.min(y, parentRect.height - draggedElement.offsetHeight));
+                draggedElement.style.left = `${x}px`;
+                draggedElement.style.top = `${y}px`;
+            }
+
+            function stopDrag() {
+                if (draggedElement && draggedElement.classList.contains('window')) {
+                    draggedElement.querySelector('.window-title-bar').style.cursor = 'grab';
+                }
+                draggedElement = null;
+                document.removeEventListener('mousemove', drag);
+            }
+
+            // --- Icon Management ---
+            function deselectAllIcons() {
+                document.querySelectorAll('.desktop-icon.selected').forEach(icon => {
+                    icon.classList.remove('selected');
+                });
+            }
+
+            albums.forEach((album, index) => {
+                const iconElement = iconTemplate.content.cloneNode(true).firstElementChild;
+                iconElement.querySelector('.icon-label').textContent = album.albumTitle;
+                const gridX = index % 10;
+                const gridY = Math.floor(index / 10);
+                iconElement.style.left = `${gridX * 90 + 20}px`;
+                iconElement.style.top = `${gridY * 110 + 20}px`;
+                iconElement.addEventListener('mousedown', (e) => {
+                    if (e.button !== 0) return;
+                    deselectAllIcons();
+                    iconElement.classList.add('selected');
+                    startDrag(e, iconElement);
+                    e.stopPropagation(); 
+                });
+                iconElement.addEventListener('dblclick', (e) => {
+                    if (e.button !== 0) return;
+                    openWindow(album);
+                });
+                desktop.appendChild(iconElement);
+            });
+
+
+            // --- Window Management ---
+            function setActiveWindow(windowEl) {
+                if (activeWindow && activeWindow !== windowEl) {
+                    const oldTitleBar = activeWindow.querySelector('.window-title-bar');
+                    if(oldTitleBar) {
+                        oldTitleBar.classList.remove('active');
+                        oldTitleBar.classList.add('inactive');
+                    }
+                }
+                if (windowEl) {
+                    const newTitleBar = windowEl.querySelector('.window-title-bar');
+                    newTitleBar.classList.add('active');
+                    newTitleBar.classList.remove('inactive');
+                    windowEl.style.zIndex = ++highestZ;
+                    activeWindow = windowEl;
+                }
+            }
+            
+            function openWindow(album) {
+                const windowId = `window-${album.albumTitle.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                const existingWindow = document.getElementById(windowId);
+                if (existingWindow) {
+                    setActiveWindow(existingWindow);
+                    return;
+                }
+
+                const windowEl = windowTemplate.content.cloneNode(true).firstElementChild;
+                windowEl.id = windowId;
+                windowEl.querySelector('.window-title-text').textContent = `${album.bandName} - ${album.albumTitle}`;
+                const trackListEl = windowEl.querySelector('.track-list');
+
+                album.tracks.forEach(track => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span class="track-number">${track.trackNumber}.</span><span>${track.title}</span>`;
+                    if (track.previewUrl) {
+                        li.classList.add('has-preview');
+                        li.addEventListener('click', () => playTrack(track.title, track.previewUrl));
+                    }
+                    trackListEl.appendChild(li);
+                });
+
+                const openWindows = document.querySelectorAll('.window').length;
+                windowEl.style.left = `${50 + openWindows * 30}px`;
+                windowEl.style.top = `${50 + openWindows * 30}px`;
+                windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                const titleBar = windowEl.querySelector('.window-title-bar');
+                titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                    if (activeWindow === windowEl) activeWindow = null;
+                    windowEl.remove();
+                });
+                desktop.appendChild(windowEl);
+                setActiveWindow(windowEl);
+            }
+
+            // --- Notepad App ---
+            window.openNotepad = function(event) {
+                event.preventDefault();
+                const windowId = 'notepad-window';
+                let windowEl = document.getElementById(windowId);
+
+                if (windowEl) {
+                    setActiveWindow(windowEl);
+                } else {
+                    windowEl = notepadTemplate.content.cloneNode(true).firstElementChild;
+                    windowEl.id = windowId;
+
+                    const openWindows = document.querySelectorAll('.window').length;
+                    windowEl.style.left = `${70 + openWindows * 30}px`;
+                    windowEl.style.top = `${70 + openWindows * 30}px`;
+                    
+                    windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                    const titleBar = windowEl.querySelector('.window-title-bar');
+                    titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                    
+                    windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                        if (activeWindow === windowEl) activeWindow = null;
+                        windowEl.remove();
+                    });
+
+                    desktop.appendChild(windowEl);
+                    setActiveWindow(windowEl);
+                }
+                
+                if (startMenu) {
+                    startMenu.remove();
+                    startMenu = null;
+                }
+            }
+
+            // --- Media Player ---
+            function createMediaPlayer() {
+                if (mediaPlayer) return;
+
+                mediaPlayer = mediaPlayerTemplate.content.cloneNode(true).firstElementChild;
+                document.body.appendChild(mediaPlayer); // Append to body to ensure it's on top
+
+                const playPauseBtn = mediaPlayer.querySelector('#player-play-pause');
+                const closeBtn = mediaPlayer.querySelector('#player-close');
+                const playIcon = mediaPlayer.querySelector('#play-icon');
+                const pauseIcon = mediaPlayer.querySelector('#pause-icon');
+
+                audio = new Audio();
+
+                playPauseBtn.addEventListener('click', () => {
+                    if (audio.paused) audio.play();
+                    else audio.pause();
+                });
+
+                closeBtn.addEventListener('click', () => {
+                    audio.pause();
+                    audio.src = "";
+                    mediaPlayer.classList.remove('visible');
+                });
+                
+                audio.addEventListener('play', () => {
+                    playIcon.style.display = 'none';
+                    pauseIcon.style.display = 'block';
+                });
+
+                audio.addEventListener('pause', () => {
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                });
+
+                audio.addEventListener('timeupdate', () => {
+                    if (audio.duration) {
+                        const progress = (audio.currentTime / audio.duration) * 100;
+                        mediaPlayer.querySelector('#player-progress').style.width = `${progress}%`;
+                    }
+                });
+
+                audio.addEventListener('ended', () => {
+                     mediaPlayer.classList.remove('visible');
+                     mediaPlayer.querySelector('#player-progress').style.width = '0%';
+                });
+            }
+
+            function playTrack(title, url) {
+                if (!mediaPlayer) {
+                    createMediaPlayer();
+                }
+                mediaPlayer.querySelector('#player-song-name').textContent = title;
+                mediaPlayer.classList.add('visible');
+                audio.src = url;
+                audio.play().catch(e => console.error("Error playing audio:", e));
+            }
+
+            // --- Start Menu ---
+            function toggleStartMenu() {
+                if (startMenu) {
+                    startMenu.remove();
+                    startMenu = null;
+                } else {
+                    startMenu = startMenuTemplate.content.cloneNode(true).firstElementChild;
+                    desktop.appendChild(startMenu);
+                }
+            }
+
+            startButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleStartMenu();
+            });
+
+            desktop.addEventListener('mousedown', (e) => {
+                if (e.target === desktop) {
+                    deselectAllIcons();
+                    if(startMenu) {
+                        startMenu.remove();
+                        startMenu = null;
+                    }
+                }
+            });
+        });
+    </script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
