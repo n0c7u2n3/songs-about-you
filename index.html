@@ -45,7 +45,7 @@
         width: 100%;
         height: 100%;
         background-color: var(--desktop-bg);
-        background-image: url('https://wallpapercave.com/wp/wp2903887.jpg');
+        background-image: url('https://github.com/n0c7u2n3/songs-about-you/blob/main/cropped-paramore-25440-26122-hd-wallpapers.jpg?raw=true');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -478,6 +478,97 @@
       .myspace-comments-list p { margin: 0 0 10px; border-bottom: 1px dotted #444; padding-bottom: 8px; }
       .myspace-comments-list b { color: #6194E4; cursor: pointer; }
 
+      /* AIM Styles */
+      .aim-window .window-content {
+        padding: 0;
+        display: flex;
+        overflow: hidden;
+        font-family: 'Tahoma', Arial, sans-serif;
+        font-size: 13px;
+      }
+      .aim-buddy-list {
+        width: 200px;
+        flex-shrink: 0;
+        background-color: #F7F7DE;
+        border-right: 2px solid;
+        border-color: var(--win-border-light) var(--win-border-dark) var(--win-border-dark) var(--win-border-light);
+        display: flex;
+        flex-direction: column;
+      }
+      .buddy-list-header {
+        background: linear-gradient(to right, var(--title-bar-active), #1e90ff);
+        color: white;
+        padding: 4px 8px;
+        font-weight: bold;
+      }
+      .buddy-group {
+        padding: 4px;
+      }
+      .buddy-group-name {
+        font-weight: bold;
+        margin-bottom: 4px;
+        color: black;
+      }
+      .buddy-group ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .buddy-item {
+        padding: 3px 8px;
+        cursor: pointer;
+        color: black;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .buddy-item:hover {
+        background-color: #e0e0c8;
+      }
+      .buddy-item.selected {
+        background-color: var(--title-bar-active);
+        color: white;
+      }
+      .aim-chat-pane {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+      }
+      .aim-chat-log {
+        flex-grow: 1;
+        padding: 8px;
+        overflow-y: auto;
+        line-height: 1.4;
+      }
+      .aim-message {
+        margin-bottom: 4px;
+        color: black;
+      }
+      .aim-message .username {
+        font-weight: bold;
+      }
+      .aim-message.you .username {
+        color: #0000A0; /* Blue for user */
+      }
+      .aim-message.buddy .username {
+        color: #D30000; /* Red for buddy */
+      }
+      .aim-input-area {
+        border-top: 1px solid var(--win-border-dark);
+        padding: 4px;
+        background-color: var(--win-bg);
+      }
+       .aim-input-area textarea {
+        width: 100%;
+        height: 60px;
+        box-sizing: border-box;
+        border: 2px inset var(--win-border-dark);
+        resize: none;
+      }
+      .aim-input-area button {
+        margin-top: 4px;
+      }
 
       /* Taskbar */
       #taskbar {
@@ -693,6 +784,19 @@
             margin-top: 0;
             height: calc(100% - 32px);
         }
+
+        /* Responsive AIM Window */
+        .aim-window .window-content {
+            flex-direction: column;
+        }
+        .aim-buddy-list {
+            width: 100%;
+            height: 150px;
+            border-right: none;
+            border-bottom: 2px solid var(--win-border-dark);
+            overflow-y: auto;
+        }
+        
 
         /* Larger touch targets */
         #taskbar {
@@ -1041,6 +1145,39 @@ My heart is
             </div>
         </div>
     </template>
+    
+    <template id="aim-template">
+        <div class="window border-outset aim-window" style="width: 600px; height: 450px; max-height: 500px;">
+             <div class="window-title-bar">
+                <span class="window-title-text">Instant Messenger</span>
+                <div class="window-controls">
+                    <button class="border-outset" title="Minimize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                    <button class="border-outset" title="Maximize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg></button>
+                    <button class="window-close-btn border-outset" title="Close"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="aim-chat-pane">
+                    <div class="aim-chat-log">
+                        <!-- Messages will be injected here -->
+                    </div>
+                    <div class="aim-input-area">
+                        <textarea disabled></textarea>
+                         <button class="border-outset" disabled>Send</button>
+                    </div>
+                </div>
+                <div class="aim-buddy-list">
+                    <div class="buddy-list-header">Buddy List</div>
+                    <div class="buddy-group">
+                        <div class="buddy-group-name">▶ Buddies</div>
+                        <ul class="buddy-list-items">
+                            <!-- Buddy items will be injected here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
 
     <template id="media-player-template">
         <div id="media-player" class="border-outset">
@@ -1077,9 +1214,13 @@ My heart is
             <img src="https://win98icons.alexmeub.com/icons/png/notepad-0.png" alt="Notepad" />
             <span>Notes</span>
         </a>
+        <a href="#" onclick="openAim(event); return false;">
+            <img src="https://win98icons.alexmeub.com/icons/png/aol_instant_messenger-0.png" alt="AIM" />
+            <span>AIM</span>
+        </a>
         <a href="#" onclick="openChatroom(event); return false;">
             <img src="https://win98icons.alexmeub.com/icons/png/users-1.png" alt="Chatrooms" />
-            <span>Chatrooms</span>
+            <span>AOL Chat</span>
         </a>
         <a href="#" onclick="openMySpace(event); return false;">
             <img src="https://win98icons.alexmeub.com/icons/png/msie1-2.png" alt="internet" />
@@ -1259,6 +1400,63 @@ My heart is
                 { filename: 'hxc', url: 'https://github.com/n0c7u2n3/songs-about-you/blob/main/IMG_0433.JPG?raw=true' },
                 { filename: 'stikammm', url: 'https://github.com/n0c7u2n3/songs-about-you/blob/main/IMG_2951.JPG?raw=true' },
             ];
+            
+            const aimConversations = {
+              'mixCDz4U': {
+                displayName: 'julian',
+                log: [
+                  { sender: 'buddy', message: 'got the new audio stitched' },
+                  { sender: 'you', message: 'aye' },
+                  { sender: 'buddy', message: 'intro’s clean. voice cracked a little at 01:32 tho' },
+                  { sender: 'you', message: 'leave it' },
+                  { sender: 'buddy', message: 'figured' },
+                ]
+              },
+              'velcro_down': {
+                displayName: 'darrell',
+                log: [
+                  { sender: 'buddy', message: 'just heard the cut!' },
+                  { sender: 'you', message: 'cool, you got the limewire link!' },
+                  { sender: 'buddy', message: 'downloaded it at the same time i was getting that new paramore album lol' },
+                  { sender: 'you', message: 'had to put it on there, file too large ugh' },
+                  { sender: 'buddy', message: 'so cool' },
+                  { sender: 'you', message: 'we’re just... with the times' },
+                  { sender: 'buddy', message: 'no literally. i’m burning it to a disc now' },
+                ]
+              },
+              'glitta_tears': {
+                displayName: 'maya',
+                log: [
+                  { sender: 'buddy', message: 'can i borrow ur cd player for the bus' },
+                  { sender: 'you', message: 'the anti-skip one or the scratched up one' },
+                  { sender: 'buddy', message: 'anti-skip. obviously.' },
+                  { sender: 'you', message: 'don’t leave it in your locker this time' },
+                  { sender: 'buddy', message: 'no promises' },
+                ]
+              },
+              'glowstickriotx': {
+                displayName: 'jess',
+                log: [
+                  { sender: 'buddy', message: 'party at javi’s friday' },
+                  { sender: 'you', message: 'are they letting ppl in this time' },
+                  { sender: 'buddy', message: 'no gatekeeping this time. bring cds' },
+                  { sender: 'you', message: 'i’ll bring the good ones' },
+                  { sender: 'buddy', message: 'don’t bring the ones u made w the weird voicemail intros again' },
+                  { sender: 'you', message: 'those are the good ones...' },
+                ]
+              },
+              'snarehungry': {
+                displayName: 'aaron',
+                log: [
+                  { sender: 'buddy', message: 'we’re meeting at the gates at 9' },
+                  { sender: 'you', message: 'i thought doors opened at 11' },
+                  { sender: 'buddy', message: 'yeah but sarah’s trying to meet nfg at the signing tent' },
+                  { sender: 'you', message: 'okay. i’ll bring sunscreen and you bring snacks' },
+                  { sender: 'buddy', message: 'i’m not your dad' },
+                  { sender: 'you', message: 'hater' },
+                ]
+              }
+            };
 
             let trackCounter = 0;
             albums.forEach(album => {
@@ -1279,6 +1477,7 @@ My heart is
             const displayPropertiesTemplate = document.getElementById('display-properties-template');
             const chatroomTemplate = document.getElementById('chatroom-template');
             const myspaceTemplate = document.getElementById('myspace-template');
+            const aimTemplate = document.getElementById('aim-template');
             const photosFolderTemplate = document.getElementById('photos-folder-template');
             const photoViewerTemplate = document.getElementById('photo-viewer-template');
 
@@ -1431,7 +1630,7 @@ My heart is
 
             
             createDesktopIcon({
-                label: 'Chat',
+                label: 'AOL Chat',
                 imgSrc: 'https://github.com/n0c7u2n3/songs-about-you/blob/main/Logo_ICQ.svg.png?raw=true',
                 x: '20px',
                 y: '400px',
@@ -1452,6 +1651,14 @@ My heart is
                 x: '130px',
                 y: '400px',
                 action: () => openReadMe()
+            });
+
+            createDesktopIcon({
+                label: 'AIM',
+                imgSrc: 'https://icons.veryicon.com/png/Internet%20%26%20Web/Socialmedia/Aim.png',
+                x: '240px',
+                y: '280px',
+                action: () => openAim()
             });
 
 
@@ -1890,6 +2097,96 @@ My heart is
                     playTrack("The Artist In The Ambulance - Thrice", mySpaceSongUrl);
                 }
                 
+                if (startMenu) {
+                    startMenu.remove();
+                    startMenu = null;
+                }
+            }
+            
+            // --- AIM App ---
+            window.openAim = function(event) {
+                event?.preventDefault();
+                const windowId = 'aim-window';
+                if (document.getElementById(windowId)) {
+                    setActiveWindow(document.getElementById(windowId));
+                    return;
+                }
+
+                const windowEl = aimTemplate.content.cloneNode(true).firstElementChild;
+                windowEl.id = windowId;
+
+                const chatLogEl = windowEl.querySelector('.aim-chat-log');
+                const buddyListEl = windowEl.querySelector('.buddy-list-items');
+                const titleTextEl = windowEl.querySelector('.window-title-text');
+                let currentSelectedBuddy = null;
+
+                function displayConversation(username) {
+                    const conversation = aimConversations[username];
+                    if (!conversation) return;
+
+                    // Update window title
+                    titleTextEl.textContent = `${username} - Instant Message`;
+                    
+                    // Update buddy list selection
+                    if (currentSelectedBuddy) {
+                        currentSelectedBuddy.classList.remove('selected');
+                    }
+                    currentSelectedBuddy = buddyListEl.querySelector(`[data-username="${username}"]`);
+                    if(currentSelectedBuddy) {
+                       currentSelectedBuddy.classList.add('selected');
+                    }
+
+
+                    // Render messages
+                    chatLogEl.innerHTML = '';
+                    conversation.log.forEach(msg => {
+                        const msgEl = document.createElement('div');
+                        msgEl.classList.add('aim-message', msg.sender); // 'you' or 'buddy'
+                        
+                        const usernameEl = document.createElement('span');
+                        usernameEl.className = 'username';
+                        usernameEl.textContent = msg.sender === 'you' ? 'SAY_Host: ' : `${username}: `;
+                        
+                        const textEl = document.createTextNode(msg.message);
+                        
+                        msgEl.appendChild(usernameEl);
+                        msgEl.appendChild(textEl);
+                        chatLogEl.appendChild(msgEl);
+                    });
+                    chatLogEl.scrollTop = chatLogEl.scrollHeight;
+                }
+
+                Object.keys(aimConversations).forEach(username => {
+                    const buddy = aimConversations[username];
+                    const buddyItem = document.createElement('li');
+                    buddyItem.className = 'buddy-item';
+                    buddyItem.textContent = `${buddy.displayName} (${username})`;
+                    buddyItem.dataset.username = username;
+                    buddyItem.addEventListener('click', () => displayConversation(username));
+                    buddyListEl.appendChild(buddyItem);
+                });
+
+                const openWindows = document.querySelectorAll('.window').length;
+                windowEl.style.left = `${140 + openWindows * 30}px`;
+                windowEl.style.top = `${140 + openWindows * 30}px`;
+
+                windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                const titleBar = windowEl.querySelector('.window-title-bar');
+                titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                    if (activeWindow === windowEl) activeWindow = null;
+                    windowEl.remove();
+                });
+
+                desktop.appendChild(windowEl);
+                setActiveWindow(windowEl);
+                
+                // Display the first conversation by default
+                const firstUser = Object.keys(aimConversations)[0];
+                if(firstUser) {
+                    displayConversation(firstUser);
+                }
+
                 if (startMenu) {
                     startMenu.remove();
                     startMenu = null;
