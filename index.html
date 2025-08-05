@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -759,6 +758,112 @@
           border-top: 1px solid #B0B0B0;
           background-color: #E0E0E0;
       }
+        
+      /* Sound Recorder App */
+      .sound-recorder-window .window-content {
+          background-color: var(--win-bg);
+          padding: 8px;
+          padding-top: 28px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          font-size: 12px;
+          color: black;
+          position: relative;
+          overflow: hidden;
+      }
+      .sound-recorder-menu {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          background: var(--win-bg);
+          padding: 2px 8px;
+          height: 20px;
+          box-sizing: border-box;
+      }
+      .sound-recorder-menu span {
+          text-decoration: underline;
+      }
+      .sound-recorder-display-panel {
+          background-color: black;
+          height: 60px;
+          padding: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: none;
+      }
+      .sound-recorder-display-panel .waveform-canvas {
+          background-color: black;
+      }
+      .sound-recorder-info-panel {
+          display: flex;
+          justify-content: space-between;
+      }
+      .sound-recorder-info-panel > div {
+          background-color: var(--win-bg);
+          padding: 4px;
+          border: 2px inset var(--win-border-dark);
+          box-shadow: none;
+          width: 120px;
+          height: 40px;
+          box-sizing: border-box;
+      }
+      .sound-recorder-slider-container {
+          height: 20px;
+          padding: 0 5px;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+      }
+      .sound-recorder-slider-track {
+          width: 100%;
+          height: 2px;
+          background-color: var(--win-border-dark);
+          border-right: 1px solid var(--win-border-light);
+          border-bottom: 1px solid var(--win-border-light);
+          position: relative;
+      }
+      .sound-recorder-slider-thumb {
+          position: absolute;
+          left: 0%;
+          top: -9px;
+          width: 10px;
+          height: 20px;
+          background-color: var(--win-bg);
+          border: 2px outset white;
+          box-shadow: 1px 1px 0 1px var(--win-border-dark);
+          pointer-events: none;
+      }
+
+      .sound-recorder-controls {
+          display: flex;
+          justify-content: center;
+          gap: 4px;
+      }
+      .sound-recorder-controls button {
+          width: 32px;
+          height: 28px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+      .sound-recorder-controls button:disabled {
+          color: var(--win-border-dark);
+          text-shadow: 1px 1px var(--win-border-light);
+      }
+      .sound-recorder-controls .record-btn {
+          border: 1px dotted var(--win-border-dark);
+          box-shadow: none;
+          padding: 2px;
+      }
+      .sound-recorder-controls .record-btn.border-outset {
+        border-style: dotted;
+      }
+      .sound-recorder-controls .record-btn svg {
+          fill: red;
+      }
 
       /* Taskbar */
       #taskbar {
@@ -1515,7 +1620,7 @@ My heart is
     <template id="skifree-template">
         <div class="window border-outset" style="width: 580px; height: 450px;">
             <div class="window-title-bar">
-                <span class="window-title-text">SkiFree (esc to leave window)</span>
+                <span class="window-title-text">SkiFree</span>
                 <div class="window-controls">
                     <button class="border-outset" title="Minimize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
                     <button class="border-outset" title="Maximize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg></button>
@@ -1523,13 +1628,54 @@ My heart is
                 </div>
             </div>
             <div class="window-content border-inset" style="padding: 0; overflow: hidden;">
-                <iframe src="https://archive.org/embed/win3_SKIFREE"
+                <iframe src="https://archive.org/embed/abandonware_skifree"
                         style="width: 100%; height: 100%;"
                         frameborder="0"
                         webkitallowfullscreen="true"
                         mozallowfullscreen="true"
                         allowfullscreen>
                 </iframe>
+            </div>
+        </div>
+    </template>
+
+    <template id="sound-recorder-template">
+        <div class="window border-outset sound-recorder-window" style="width: 350px; height: auto; max-height: none;">
+            <div class="window-title-bar">
+                <span class="window-title-text">Sound - Sound Recorder</span>
+                <div class="window-controls">
+                    <button class="border-outset" title="Minimize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                    <button class="border-outset" title="Maximize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg></button>
+                    <button class="window-close-btn border-outset" title="Close"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                </div>
+            </div>
+            <div class="window-content sound-recorder-content">
+                <div class="sound-recorder-menu">
+                    <span>F</span>ile &nbsp; <span>E</span>dit &nbsp; <span>E</span>ffects &nbsp; <span>H</span>elp
+                </div>
+                <div class="sound-recorder-display-panel border-inset">
+                    <canvas class="waveform-canvas" width="315" height="50"></canvas>
+                </div>
+                <div class="sound-recorder-info-panel">
+                    <div class="position-display">
+                        Position:<br><span class="position-time">0.00</span> sec.
+                    </div>
+                    <div class="length-display">
+                        Length:<br><span class="length-time">0.00</span> sec.
+                    </div>
+                </div>
+                <div class="sound-recorder-slider-container">
+                    <div class="sound-recorder-slider-track">
+                        <div class="sound-recorder-slider-thumb"></div>
+                    </div>
+                </div>
+                <div class="sound-recorder-controls">
+                    <button class="rewind-btn border-outset" title="Rewind"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M10 2V10L6 6L10 2ZM6 2V10L2 6L6 2Z"/></svg></button>
+                    <button class="ff-btn border-outset" title="Fast Forward"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M2 2V10L6 6L2 2ZM6 2V10L10 6L6 2Z"/></svg></button>
+                    <button class="play-btn border-outset" title="Play"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M3 2L9 6L3 10V2Z"/></svg></button>
+                    <button class="stop-btn border-outset" title="Stop"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M2 2H10V10H2V2Z"/></svg></button>
+                    <button class="record-btn border-outset" title="Record"><svg width="12" height="12" viewBox="0 0 12 12"><circle cx="6" cy="6" r="4" fill="red"/></svg></button>
+                </div>
             </div>
         </div>
     </template>
@@ -1575,8 +1721,10 @@ My heart is
             <span>AIM</span>
         </a>
         <a href="#" onclick="openSkiFree(event); return false;">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsnE5rYHrv8fx5lggwQpzCRMhixq96sJTAdA&s" alt="SkiFree" />
+            <img src="https://images.launchbox-app.com/7564f381-9008-4fc1-a041-94eb9c2222f6.png" alt="SkiFree" />
             <span>SkiFree</span>
+        </a>
+    
         </a>
         <a href="#" onclick="openChatroom(event); return false;">
             <img src="https://github.com/n0c7u2n3/songs-about-you/blob/main/Logo_ICQ.svg.png?raw=true" alt="Chat" />
@@ -1834,8 +1982,8 @@ My heart is
             const startMenuTemplate = document.getElementById('start-menu-template');
             const notepadTemplate = document.getElementById('notepad-template');
             const readmeTemplate = document.getElementById('readme-template');
-            const displayPropertiesTemplate = document.getElementById('display-properties-template');
             const chatroomTemplate = document.getElementById('chatroom-template');
+            const displayPropertiesTemplate = document.getElementById('display-properties-template');
             const myspaceTemplate = document.getElementById('myspace-template');
             const aimTemplate = document.getElementById('aim-template');
             const photosFolderTemplate = document.getElementById('photos-folder-template');
@@ -1843,6 +1991,7 @@ My heart is
             const simsWindowTemplate = document.getElementById('sims-window-template');
             const limewireTemplate = document.getElementById('limewire-template');
             const skifreeTemplate = document.getElementById('skifree-template');
+            const soundRecorderTemplate = document.getElementById('sound-recorder-template');
 
             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
@@ -1895,17 +2044,34 @@ My heart is
 
             function drag(e) {
                 if (!draggedElement) return;
-                 // Set a flag to distinguish a drag from a click
                 draggedElement.dataset.isDragging = 'true';
 
                 const parentRect = desktop.getBoundingClientRect();
                 let x = e.clientX - dragOffsetX;
                 let y = e.clientY - dragOffsetY;
 
-                // Constrain icon dragging to within the desktop area
                 if (draggedElement.classList.contains('desktop-icon')) {
+                    // Constrain icon dragging to within the desktop area
                     x = Math.max(0, Math.min(x, parentRect.width - draggedElement.offsetWidth));
                     y = Math.max(0, Math.min(y, parentRect.height - draggedElement.offsetHeight));
+                } else if (draggedElement.classList.contains('window')) {
+                    // Constrain window dragging so its title bar can't go off-screen.
+                    // This ensures the user can always drag it back.
+                    const titleBar = draggedElement.querySelector('.window-title-bar');
+                    // Use a fallback height just in case, matching the CSS.
+                    const titleBarHeight = titleBar ? titleBar.offsetHeight : 24; 
+                    
+                    // Prevent moving too far up. The top of the window cannot go above the top of the desktop.
+                    y = Math.max(0, y);
+                    
+                    // Prevent moving too far down. The title bar must remain visible at the bottom.
+                    y = Math.min(y, parentRect.height - titleBarHeight);
+
+                    // Prevent moving too far left. At least 40px of the window must be visible.
+                    x = Math.max(x, -(draggedElement.offsetWidth - 40));
+                    
+                    // Prevent moving too far right. At least 40px of the window must be visible.
+                    x = Math.min(x, parentRect.width - 40);
                 }
 
                 draggedElement.style.left = `${x}px`;
@@ -2042,10 +2208,18 @@ My heart is
 
             createDesktopIcon({
                 label: 'SkiFree',
-                imgSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsnE5rYHrv8fx5lggwQpzCRMhixq96sJTAdA&s',
+                imgSrc: 'https://www.giantbomb.com/a/uploads/scale_small/8/87790/3216817-icon_ski.png',
                 x: '350px',
                 y: '400px',
                 action: () => openSkiFree()
+            });
+
+            createDesktopIcon({
+                label: 'Sound Recorder',
+                imgSrc: 'https://win98icons.alexmeub.com/icons/png/microphone_2-0.png',
+                x: '460px',
+                y: '280px',
+                action: () => openSoundRecorder()
             });
 
 
@@ -2669,6 +2843,283 @@ My heart is
 
                 desktop.appendChild(windowEl);
                 setActiveWindow(windowEl);
+                
+                if (startMenu) {
+                    startMenu.remove();
+                    startMenu = null;
+                }
+            }
+
+            // --- Sound Recorder App ---
+            window.openSoundRecorder = function(event) {
+                event?.preventDefault();
+                const windowId = 'sound-recorder-window';
+                let windowEl = document.getElementById(windowId);
+
+                if (windowEl) {
+                    setActiveWindow(windowEl);
+                } else {
+                    windowEl = soundRecorderTemplate.content.cloneNode(true).firstElementChild;
+                    windowEl.id = windowId;
+
+                    // --- Sound Recorder State and Elements ---
+                    let mediaRecorder;
+                    let audioChunks = [];
+                    let audioBlob = null;
+                    let audioUrl = null;
+                    let isRecording = false;
+                    let recordingStream = null;
+
+                    const playbackAudio = new Audio();
+
+                    const recordBtn = windowEl.querySelector('.record-btn');
+                    const playBtn = windowEl.querySelector('.play-btn');
+                    const stopBtn = windowEl.querySelector('.stop-btn');
+                    const rewindBtn = windowEl.querySelector('.rewind-btn');
+                    const ffBtn = windowEl.querySelector('.ff-btn');
+
+                    const positionTimeEl = windowEl.querySelector('.position-time');
+                    const lengthTimeEl = windowEl.querySelector('.length-time');
+                    
+                    const sliderThumb = windowEl.querySelector('.sound-recorder-slider-thumb');
+                    const sliderContainer = windowEl.querySelector('.sound-recorder-slider-container');
+
+                    const canvas = windowEl.querySelector('.waveform-canvas');
+                    const canvasCtx = canvas.getContext('2d');
+                    let audioContext;
+                    let analyser;
+                    let micSourceNode;
+                    let playbackSourceNode;
+                    let visualizerFrameId;
+
+                    // --- Functions ---
+                    const initAudioContext = () => {
+                        if (!audioContext || audioContext.state === 'closed') {
+                            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                            analyser = audioContext.createAnalyser();
+                        }
+                    };
+
+                    const formatTime = (seconds) => (seconds || 0).toFixed(2);
+
+                    const updateButtonStates = () => {
+                        const canPlay = playbackAudio.src && playbackAudio.duration > 0;
+                        const isPlaying = !playbackAudio.paused;
+                        const isAtStart = playbackAudio.currentTime === 0;
+
+                        recordBtn.disabled = isRecording || canPlay;
+                        playBtn.disabled = isRecording || !canPlay || isPlaying;
+                        stopBtn.disabled = !isRecording && (playbackAudio.paused && isAtStart);
+                        rewindBtn.disabled = isRecording || !canPlay;
+                        ffBtn.disabled = isRecording || !canPlay;
+                    };
+
+                    const drawWaveform = () => {
+                        if (!analyser) return;
+
+                        visualizerFrameId = requestAnimationFrame(drawWaveform);
+
+                        const bufferLength = analyser.frequencyBinCount;
+                        const dataArray = new Uint8Array(bufferLength);
+                        analyser.getByteTimeDomainData(dataArray);
+
+                        canvasCtx.fillStyle = 'black';
+                        canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+                        canvasCtx.lineWidth = 2;
+                        canvasCtx.strokeStyle = '#00FF00';
+                        canvasCtx.beginPath();
+
+                        const sliceWidth = canvas.width * 1.0 / bufferLength;
+                        let x = 0;
+
+                        for (let i = 0; i < bufferLength; i++) {
+                            const v = dataArray[i] / 128.0;
+                            const y = v * canvas.height / 2;
+                            if (i === 0) {
+                                canvasCtx.moveTo(x, y);
+                            } else {
+                                canvasCtx.lineTo(x, y);
+                            }
+                            x += sliceWidth;
+                        }
+
+                        canvasCtx.lineTo(canvas.width, canvas.height / 2);
+                        canvasCtx.stroke();
+                    };
+                    
+                    const stopVisualization = () => {
+                         if (visualizerFrameId) {
+                            cancelAnimationFrame(visualizerFrameId);
+                            visualizerFrameId = null;
+                         }
+                         // Draw a flat line
+                         canvasCtx.fillStyle = 'black';
+                         canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+                         canvasCtx.strokeStyle = '#00FF00';
+                         canvasCtx.beginPath();
+                         canvasCtx.moveTo(0, canvas.height / 2);
+                         canvasCtx.lineTo(canvas.width, canvas.height / 2);
+                         canvasCtx.stroke();
+                    };
+
+                    const startRecording = async () => {
+                        if (isRecording) return;
+                        try {
+                            recordingStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                            isRecording = true;
+                            audioChunks = [];
+                            playbackAudio.src = ''; 
+                            audioBlob = null;
+                            if(audioUrl) URL.revokeObjectURL(audioUrl);
+                            audioUrl = null;
+
+                            lengthTimeEl.textContent = formatTime(0);
+                            positionTimeEl.textContent = formatTime(0);
+                            sliderThumb.style.left = '0%';
+
+                            updateButtonStates();
+
+                            mediaRecorder = new MediaRecorder(recordingStream);
+                            mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
+                            mediaRecorder.onstop = () => {
+                                audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                                audioUrl = URL.createObjectURL(audioBlob);
+                                playbackAudio.src = audioUrl;
+                            };
+                            mediaRecorder.start();
+                            
+                            initAudioContext();
+                            if (micSourceNode) micSourceNode.disconnect();
+                            micSourceNode = audioContext.createMediaStreamSource(recordingStream);
+                            micSourceNode.connect(analyser);
+                            drawWaveform();
+
+                        } catch (err) {
+                            console.error('Error accessing microphone:', err);
+                            alert('Could not access microphone. Please check permissions.');
+                            isRecording = false;
+                            updateButtonStates();
+                        }
+                    };
+
+                    const stopAction = () => {
+                        if (isRecording) {
+                            isRecording = false;
+                            if (mediaRecorder) mediaRecorder.stop();
+                            if (recordingStream) {
+                                recordingStream.getTracks().forEach(track => track.stop());
+                            }
+                            if (micSourceNode) micSourceNode.disconnect();
+                            micSourceNode = null;
+                            stopVisualization();
+                        }
+                        if (!playbackAudio.paused) {
+                            playbackAudio.pause();
+                            playbackAudio.currentTime = 0;
+                        }
+                        updateButtonStates();
+                    };
+
+                    // --- Event Listeners ---
+                    recordBtn.addEventListener('click', startRecording);
+                    stopBtn.addEventListener('click', stopAction);
+                    
+                    playBtn.addEventListener('click', () => {
+                         if (playbackAudio.src && playbackAudio.paused) {
+                            initAudioContext();
+                            if (audioContext.state === 'suspended') {
+                                audioContext.resume();
+                            }
+                            playbackAudio.play();
+                         }
+                    });
+
+                    rewindBtn.addEventListener('click', () => playbackAudio.currentTime = Math.max(0, playbackAudio.currentTime - 2));
+                    ffBtn.addEventListener('click', () => playbackAudio.currentTime = Math.min(playbackAudio.duration || 0, playbackAudio.currentTime + 2));
+
+                    playbackAudio.addEventListener('loadedmetadata', () => {
+                        lengthTimeEl.textContent = formatTime(playbackAudio.duration);
+                        updateButtonStates();
+                    });
+
+                    playbackAudio.addEventListener('play', () => {
+                        initAudioContext();
+                        if (!playbackSourceNode) {
+                            playbackSourceNode = audioContext.createMediaElementSource(playbackAudio);
+                            playbackSourceNode.connect(analyser);
+                            analyser.connect(audioContext.destination);
+                        }
+                        drawWaveform();
+                        updateButtonStates();
+                    });
+
+                    playbackAudio.addEventListener('pause', () => {
+                        stopVisualization();
+                        updateButtonStates();
+                    });
+                    
+                    playbackAudio.addEventListener('ended', () => {
+                         playbackAudio.currentTime = 0;
+                         stopVisualization();
+                         updateButtonStates();
+                    });
+                    
+                    playbackAudio.addEventListener('timeupdate', () => {
+                         if (isDraggingSlider || !playbackAudio.duration) return;
+                         positionTimeEl.textContent = formatTime(playbackAudio.currentTime);
+                         const progress = (playbackAudio.currentTime / playbackAudio.duration) * 100;
+                         sliderThumb.style.left = `${progress}%`;
+                    });
+                    
+                    let isDraggingSlider = false;
+                    const handleSliderInteraction = (e) => {
+                         const canSeek = playbackAudio.src && playbackAudio.duration > 0;
+                         if (!canSeek) return;
+                         const trackRect = sliderContainer.getBoundingClientRect();
+                         let progress = (e.clientX - trackRect.left) / trackRect.width;
+                         progress = Math.max(0, Math.min(1, progress));
+                         playbackAudio.currentTime = playbackAudio.duration * progress;
+                         sliderThumb.style.left = `${progress * 100}%`;
+                    };
+
+                    sliderContainer.addEventListener('mousedown', (e) => {
+                         isDraggingSlider = true;
+                         handleSliderInteraction(e);
+                    });
+                    document.addEventListener('mousemove', (e) => {
+                         if (isDraggingSlider) handleSliderInteraction(e);
+                    });
+                    document.addEventListener('mouseup', () => {
+                         isDraggingSlider = false;
+                    });
+
+
+                    // --- Window Management ---
+                    const openWindows = document.querySelectorAll('.window').length;
+                    windowEl.style.left = `${180 + openWindows * 30}px`;
+                    windowEl.style.top = `${180 + openWindows * 30}px`;
+                    
+                    windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                    const titleBar = windowEl.querySelector('.window-title-bar');
+                    titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                    
+                    windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                        stopAction();
+                        if (audioContext && audioContext.state !== 'closed') {
+                            audioContext.close();
+                        }
+                        if (audioUrl) {
+                            URL.revokeObjectURL(audioUrl);
+                        }
+                        if (activeWindow === windowEl) activeWindow = null;
+                        windowEl.remove();
+                    });
+
+                    desktop.appendChild(windowEl);
+                    setActiveWindow(windowEl);
+                    updateButtonStates();
+                    stopVisualization();
+                }
                 
                 if (startMenu) {
                     startMenu.remove();
