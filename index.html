@@ -1724,7 +1724,9 @@ My heart is
             <img src="https://images.launchbox-app.com/7564f381-9008-4fc1-a041-94eb9c2222f6.png" alt="SkiFree" />
             <span>SkiFree</span>
         </a>
-    
+         <a href="#" onclick="openSoundRecorder(event); return false;">
+            <img src="https://win98icons.alexmeub.com/icons/png/microphone_2-0.png" alt="Sound Recorder" />
+            <span>Sound Recorder</span>
         </a>
         <a href="#" onclick="openChatroom(event); return false;">
             <img src="https://github.com/n0c7u2n3/songs-about-you/blob/main/Logo_ICQ.svg.png?raw=true" alt="Chat" />
@@ -2903,15 +2905,14 @@ My heart is
                     const formatTime = (seconds) => (seconds || 0).toFixed(2);
 
                     const updateButtonStates = () => {
-                        const canPlay = playbackAudio.src && playbackAudio.duration > 0;
                         const isPlaying = !playbackAudio.paused;
-                        const isAtStart = playbackAudio.currentTime === 0;
-
-                        recordBtn.disabled = isRecording || canPlay;
-                        playBtn.disabled = isRecording || !canPlay || isPlaying;
-                        stopBtn.disabled = !isRecording && (playbackAudio.paused && isAtStart);
-                        rewindBtn.disabled = isRecording || !canPlay;
-                        ffBtn.disabled = isRecording || !canPlay;
+                        const hasRecording = !!playbackAudio.src;
+                        
+                        recordBtn.disabled = isRecording || isPlaying;
+                        playBtn.disabled = isRecording || !hasRecording || isPlaying;
+                        stopBtn.disabled = !isRecording && playbackAudio.paused;
+                        rewindBtn.disabled = isRecording || !hasRecording;
+                        ffBtn.disabled = isRecording || !hasRecording;
                     };
 
                     const drawWaveform = () => {
@@ -2965,6 +2966,11 @@ My heart is
                     const startRecording = async () => {
                         if (isRecording) return;
                         try {
+                            // Reset previous playback if any
+                            if (!playbackAudio.paused) {
+                                playbackAudio.pause();
+                            }
+                            
                             recordingStream = await navigator.mediaDevices.getUserMedia({ audio: true });
                             isRecording = true;
                             audioChunks = [];
@@ -3005,7 +3011,9 @@ My heart is
                     const stopAction = () => {
                         if (isRecording) {
                             isRecording = false;
-                            if (mediaRecorder) mediaRecorder.stop();
+                            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                                 mediaRecorder.stop();
+                            }
                             if (recordingStream) {
                                 recordingStream.getTracks().forEach(track => track.stop());
                             }
@@ -3034,8 +3042,8 @@ My heart is
                          }
                     });
 
-                    rewindBtn.addEventListener('click', () => playbackAudio.currentTime = Math.max(0, playbackAudio.currentTime - 2));
-                    ffBtn.addEventListener('click', () => playbackAudio.currentTime = Math.min(playbackAudio.duration || 0, playbackAudio.currentTime + 2));
+                    rewindBtn.addEventListener('click', () => playbackAudio.currentTime = 0);
+                    ffBtn.addEventListener('click', () => playbackAudio.currentTime = playbackAudio.duration || 0);
 
                     playbackAudio.addEventListener('loadedmetadata', () => {
                         lengthTimeEl.textContent = formatTime(playbackAudio.duration);
@@ -3044,11 +3052,13 @@ My heart is
 
                     playbackAudio.addEventListener('play', () => {
                         initAudioContext();
-                        if (!playbackSourceNode) {
-                            playbackSourceNode = audioContext.createMediaElementSource(playbackAudio);
-                            playbackSourceNode.connect(analyser);
-                            analyser.connect(audioContext.destination);
+                        if (playbackSourceNode) {
+                           playbackSourceNode.disconnect();
                         }
+                        playbackSourceNode = audioContext.createMediaElementSource(playbackAudio);
+                        playbackSourceNode.connect(analyser);
+                        analyser.connect(audioContext.destination);
+                        
                         drawWaveform();
                         updateButtonStates();
                     });
@@ -3074,12 +3084,13 @@ My heart is
                     let isDraggingSlider = false;
                     const handleSliderInteraction = (e) => {
                          const canSeek = playbackAudio.src && playbackAudio.duration > 0;
-                         if (!canSeek) return;
+                         if (!canSeek || !isDraggingSlider) return;
                          const trackRect = sliderContainer.getBoundingClientRect();
                          let progress = (e.clientX - trackRect.left) / trackRect.width;
                          progress = Math.max(0, Math.min(1, progress));
                          playbackAudio.currentTime = playbackAudio.duration * progress;
                          sliderThumb.style.left = `${progress * 100}%`;
+                         positionTimeEl.textContent = formatTime(playbackAudio.currentTime);
                     };
 
                     sliderContainer.addEventListener('mousedown', (e) => {
