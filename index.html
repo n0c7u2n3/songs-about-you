@@ -7,7 +7,2355 @@
     <title>Songs About You</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.g
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Songs About You</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --win-bg: #c0c0c0;
+        --win-border-light: #ffffff;
+        --win-border-dark: #808080;
+        --win-border-black: #000000;
+        --title-bar-active: #000080;
+        --title-bar-inactive: #808080;
+        --desktop-bg: #008080;
+      }
+
+      body {
+        font-family: 'Inter', sans-serif;
+        font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+        height: 100vh;
+        width: 100vw;
+        overflow: hidden;
+        margin: 0;
+        user-select: none;
+        -webkit-user-select: none; /* For Safari */
+      }
+
+      #app-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      #desktop {
+        flex-grow: 1;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-color: var(--desktop-bg);
+        background-image: url('https://wallpapercave.com/wp/wp2903887.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      /* Outset Border Style */
+      .border-outset {
+        border: 2px solid;
+        border-color: var(--win-border-light) var(--win-border-black) var(--win-border-black) var(--win-border-light);
+        box-shadow: 1px 1px 0 1px var(--win-border-dark);
+      }
+      .border-outset:active {
+        border-color: var(--win-border-dark) var(--win-border-light) var(--win-border-light) var(--win-border-dark);
+        box-shadow: none;
+      }
+
+      /* Inset Border Style */
+      .border-inset {
+        border: 2px solid;
+        border-color: var(--win-border-dark) var(--win-border-light) var(--win-border-light) var(--win-border-dark);
+      }
+
+      /* Desktop Icon */
+      .desktop-icon {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100px;
+        cursor: pointer;
+        padding: 4px;
+      }
+      .desktop-icon .icon-image {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .desktop-icon .jewel-case {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(2px);
+        padding: 4px;
+        border: 1px solid #777;
+        display: flex;
+      }
+      .desktop-icon .spine {
+        width: 8px;
+        height: 100%;
+        background-color: rgba(50, 50, 50, 0.7);
+      }
+      .desktop-icon .cd-area {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .desktop-icon .cd {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #a7b5d1, #7c89a7, #d4dcf0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+      }
+      .desktop-icon .cd-hole {
+        width: 20px;
+        height: 20px;
+        background: var(--win-bg);
+        border-radius: 50%;
+        border: 2px solid #aaa;
+      }
+      .desktop-icon .icon-label {
+        color: white;
+        text-align: center;
+        font-size: 14px;
+        padding: 2px 4px;
+        word-wrap: break-word;
+      }
+      .desktop-icon.selected > .icon-label {
+        background-color: var(--title-bar-active);
+      }
+
+      /* Window */
+      .window {
+        position: absolute;
+        width: 450px;
+        min-width: 250px;
+        max-height: 400px;
+        background-color: var(--win-bg);
+        padding: 4px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .window-title-bar {
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4px;
+        color: white;
+        font-weight: bold;
+        cursor: grab;
+      }
+      .window-title-bar.active { background-color: var(--title-bar-active); }
+      .window-title-bar.inactive { background-color: var(--title-bar-inactive); color: #c0c0c0;}
+
+      .window-title-bar:active { cursor: grabbing; }
+
+      .window-title-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .window-controls {
+        display: flex;
+      }
+
+      .window-controls button {
+        width: 20px;
+        height: 20px;
+        background-color: var(--win-bg);
+        margin-left: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .window-content {
+        flex-grow: 1;
+        margin-top: 4px;
+        background: white;
+        padding: 4px;
+        overflow-y: auto;
+      }
+      
+      /* Single-column File List for Albums */
+      .file-list-item {
+          display: flex;
+          align-items: center;
+          padding: 4px 8px;
+          cursor: pointer;
+          color: black;
+          font-size: 14px;
+      }
+      .file-list-item:hover {
+          background-color: var(--title-bar-active);
+          color: white;
+      }
+      .file-list-item img {
+          width: 20px;
+          height: 20px;
+          margin-right: 8px;
+          image-rendering: pixelated;
+      }
+
+      /* Notepad styles */
+      .window-content.notepad {
+          padding: 0;
+          height: 100%;
+      }
+      .notepad-textarea {
+          width: 100%;
+          height: 100%;
+          box-sizing: border-box;
+          border: none;
+          resize: none;
+          background-color: white;
+          color: black;
+          font-family: monospace;
+          font-size: 14px;
+          padding: 4px;
+      }
+      .notepad-textarea:focus {
+          outline: none;
+      }
+      
+      /* Photos Folder Styles */
+      .file-list-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px;
+      }
+      .file-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 90px;
+        cursor: pointer;
+        padding: 4px;
+        text-align: center;
+      }
+      .file-item:hover {
+        background-color: #e0e0e0;
+      }
+      .file-item.selected {
+        background-color: var(--title-bar-active);
+        color: white;
+      }
+      .file-item img {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 4px;
+        object-fit: cover;
+        border: 2px solid;
+        border-color: var(--win-border-dark) var(--win-border-light) var(--win-border-light) var(--win-border-dark);
+      }
+      .file-item span {
+        font-size: 12px;
+        word-break: break-all;
+      }
+
+      /* Photo Viewer Styles */
+      .photo-viewer-content {
+        background-color: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding: 0;
+      }
+      .photo-viewer-content img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+
+
+      /* Chatroom Styles */
+      .window-content.chatroom-body {
+          padding: 0;
+          display: flex;
+          background-color: var(--win-bg);
+          font-family: Arial, Helvetica, sans-serif;
+          font-size: 13px;
+          overflow: hidden;
+      }
+      .chatroom-main-pane {
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          padding: 4px;
+          min-width: 0;
+      }
+      .chatroom-log-container {
+          flex-grow: 1;
+          background-color: #000033;
+          color: white;
+          padding: 8px;
+          overflow-y: auto;
+          line-height: 1.4;
+      }
+      .chatroom-log-container p {
+          margin: 0 0 4px 0;
+      }
+      .chatroom-log-container .chat-user {
+          font-weight: bold;
+      }
+      .chatroom-log-container .chat-text {
+          color: white;
+      }
+      .chatroom-log-container .system-message {
+          color: #FF6347;
+          font-style: italic;
+      }
+      .chatroom-input-container {
+          display: flex;
+          margin-top: 4px;
+      }
+      .chatroom-input-container input {
+          flex-grow: 1;
+          height: 24px;
+          padding: 0 4px;
+          border-width: 2px;
+          box-sizing: border-box;
+      }
+      .chatroom-input-container button {
+          height: 24px;
+          width: 60px;
+          margin-left: 4px;
+          font-size: 12px;
+      }
+      .chatroom-sidebar {
+          width: 120px;
+          flex-shrink: 0;
+          padding: 4px 4px 4px 0;
+          display: flex;
+          flex-direction: column;
+      }
+      .chatroom-sidebar .sidebar-header {
+          height: 24px;
+          padding: 0 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: black;
+          font-weight: bold;
+          font-size: 12px;
+      }
+      .chatroom-sidebar .chatroom-user-list {
+          flex-grow: 1;
+          background: white;
+          padding: 4px;
+          list-style: none;
+          margin: 0;
+          margin-top: 4px;
+          overflow-y: auto;
+          color: black;
+      }
+      .chatroom-sidebar .chatroom-user-list li {
+          padding: 2px 4px;
+      }
+
+      /* Display Properties Window */
+        .display-properties-content {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            color: black;
+        }
+        .wallpaper-preview-container {
+            height: 180px;
+            width: 100%;
+            background-color: #000;
+            padding: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .wallpaper-preview {
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: var(--desktop-bg);
+            background-image: url('https://github.com/n0c7u2n3/songs-about-you/blob/main/cropped-paramore-25440-26122-hd-wallpapers.jpg?raw=true');
+        }
+        .wallpaper-controls {
+            margin-top: 8px;
+        }
+        .wallpaper-controls p {
+            margin: 0 0 8px 0;
+            font-size: 12px;
+        }
+        .wallpaper-controls button {
+            margin-right: 5px;
+            height: 24px;
+            padding: 0 8px;
+            font-size: 12px;
+        }
+        .window-actions {
+            display: flex;
+            justify-content: flex-end;
+            padding: 6px 4px;
+        }
+        .window-actions button {
+            width: 80px;
+            height: 24px;
+            margin-left: 6px;
+            font-size: 12px;
+        }
+
+      /* MySpace Styles */
+      .myspace-window .window-title-text {
+        font-family: 'Tahoma', sans-serif;
+        font-size: 11px;
+        font-weight: normal;
+      }
+      .myspace-body {
+        cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADISURBVDhPzZJRDsAgCEQ9+f9/tA8WpQYswQkI3TT7k5RCy8R2YLLgihS8A3QyowGwcYcjYhA4nQdAB+hE3n0yG4oB3B/0kU9Ad8SroDsyV8AcuYvoDsxVAHdyLqA7MZMAN6EHYA7MWQAXwB2Y4QAcwS2YxwB4AhsxSwLgCkzFLAhAKjCVPwtAKDCV+gqAoMBV6iuAoMD19isAoMD1/isAoMD3A6gCgMIH4FcAQOEz8isAgvIT8iuAgvIXsfejLOoDNpHZURn2v/sAAAAASUVORK5CYII='), auto;
+        background-color: #000;
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAADFJREFUGJWtkEEKACEIA/8/8724sYQKEhEbBnoGY2I6K0EonPInEafE4/A8aP83wt9733sC7wAp6A22F2JvJAAAAABJRU5ErkJggg==');
+        color: white;
+        font-family: 'Verdana', sans-serif;
+        padding: 10px;
+        display: flex;
+        gap: 10px;
+      }
+      .myspace-left-col { flex: 2; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+      .myspace-right-col { flex: 1; display: flex; flex-direction: column; gap: 10px; min-width: 0;}
+
+      .myspace-module {
+        border: 1px solid hotpink;
+        background: rgba(10, 10, 10, 0.8);
+      }
+      .myspace-module-header {
+        background-color: hotpink;
+        color: black;
+        font-weight: bold;
+        padding: 3px 8px;
+        font-size: 12px;
+      }
+      .myspace-module-content { padding: 10px; font-size: 13px; line-height: 1.4; }
+      
+      .myspace-profile-header { text-align: center; }
+      .myspace-profile-header img {
+        width: 150px;
+        height: 150px;
+        border: 2px solid hotpink;
+        padding: 2px;
+        margin-bottom: 8px;
+      }
+      .myspace-profile-header h2 { margin: 0; font-size: 20px; color: hotpink; }
+      .myspace-profile-details { list-style: none; padding: 0; margin: 0; color: #ccc; }
+      .myspace-profile-details li { padding: 1px 0; }
+      #myspace-song { font-weight: bold; color: white; }
+
+      .myspace-about-me { color: white; }
+      .myspace-about-me b { color: hotpink; }
+
+      .myspace-top8 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .myspace-friend { text-align: center; font-size: 11px; }
+      .myspace-friend img { width: 50px; height: 50px; border: 1px solid #555; display: block; margin: 0 auto 4px; }
+
+      .myspace-comments-list p { margin: 0 0 10px; border-bottom: 1px dotted #444; padding-bottom: 8px; }
+      .myspace-comments-list b { color: #6194E4; cursor: pointer; }
+
+      /* AIM Styles */
+      .aim-window .window-content {
+        padding: 0;
+        display: flex;
+        overflow: hidden;
+        font-family: 'Tahoma', Arial, sans-serif;
+        font-size: 13px;
+      }
+      .aim-buddy-list {
+        width: 200px;
+        flex-shrink: 0;
+        background-color: #F7F7DE;
+        border-right: 2px solid;
+        border-color: var(--win-border-light) var(--win-border-dark) var(--win-border-dark) var(--win-border-light);
+        display: flex;
+        flex-direction: column;
+      }
+      .buddy-list-header {
+        background: linear-gradient(to right, var(--title-bar-active), #1e90ff);
+        color: white;
+        padding: 4px 8px;
+        font-weight: bold;
+      }
+      .buddy-group {
+        padding: 4px;
+      }
+      .buddy-group-name {
+        font-weight: bold;
+        margin-bottom: 4px;
+        color: black;
+      }
+      .buddy-group ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .buddy-item {
+        padding: 3px 8px;
+        cursor: pointer;
+        color: black;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .buddy-item:hover {
+        background-color: #e0e0c8;
+      }
+      .buddy-item.selected {
+        background-color: var(--title-bar-active);
+        color: white;
+      }
+      .aim-chat-pane {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+      }
+      .aim-chat-log {
+        flex-grow: 1;
+        padding: 8px;
+        overflow-y: auto;
+        line-height: 1.4;
+      }
+      .aim-message {
+        margin-bottom: 4px;
+        color: black;
+      }
+      .aim-message .username {
+        font-weight: bold;
+      }
+      .aim-message.you .username {
+        color: #0000A0; /* Blue for user */
+      }
+      .aim-message.buddy .username {
+        color: #D30000; /* Red for buddy */
+      }
+      .aim-input-area {
+        border-top: 1px solid var(--win-border-dark);
+        padding: 4px;
+        background-color: var(--win-bg);
+      }
+       .aim-input-area textarea {
+        width: 100%;
+        height: 60px;
+        box-sizing: border-box;
+        border: 2px inset var(--win-border-dark);
+        resize: none;
+      }
+      .aim-input-area button {
+        margin-top: 4px;
+      }
+
+      /* Taskbar */
+      #taskbar {
+        width: 100%;
+        height: 40px;
+        background-color: var(--win-bg);
+        border-top: 2px solid var(--win-border-light);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4px;
+        z-index: 10000;
+      }
+      #start-button {
+        height: 32px;
+        width: 90px;
+        background-color: var(--win-bg);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0 4px;
+        font-family: 'Pixelify Sans', sans-serif;
+      }
+      #start-button img {
+        height: 24px;
+        width: 24px;
+        margin-right: 4px;
+        image-rendering: pixelated;
+      }
+      #start-button span {
+        font-weight: bold;
+        font-size: 14px;
+        color: black;
+      }
+      #clock {
+        height: 32px;
+        padding: 0 8px;
+        display: flex;
+        align-items: center;
+        color: black;
+        font-size: 14px;
+      }
+
+      /* Start Menu */
+      #start-menu {
+        position: absolute;
+        bottom: 40px;
+        left: 0;
+        width: 250px;
+        background-color: var(--win-bg);
+        padding: 4px;
+        z-index: 10001;
+        display: flex;
+        flex-direction: column;
+      }
+      #start-menu a {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: black;
+        padding: 8px;
+        font-size: 14px;
+      }
+      #start-menu a:hover {
+        background-color: var(--title-bar-active);
+        color: white;
+      }
+      #start-menu img {
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+        image-rendering: pixelated;
+      }
+      .start-menu-separator {
+        height: 0;
+        border-top: 1px solid var(--win-border-dark);
+        border-bottom: 1px solid var(--win-border-light);
+        margin: 4px;
+      }
+
+
+      /* Media Player */
+      #media-player {
+        position: fixed;
+        bottom: 50px;
+        right: 10px;
+        width: 280px;
+        background-color: var(--win-bg);
+        padding: 4px;
+        z-index: 9999;
+        display: none;
+        flex-direction: column;
+      }
+      #media-player.visible {
+        display: flex;
+      }
+      #player-title, #player-song-name {
+        color: black;
+        font-size: 12px;
+        padding: 2px 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      #player-song-name {
+          font-weight: bold;
+      }
+      .player-controls {
+          display: flex;
+          align-items: center;
+          margin-top: 4px;
+      }
+      .player-controls button {
+        width: 24px;
+        height: 24px;
+        background-color: var(--win-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 4px;
+      }
+      #player-play-pause {
+        margin-left: 0;
+      }
+      #player-progress-bar {
+          flex-grow: 1;
+          height: 20px;
+          margin-left: 4px;
+          background-color: white;
+      }
+      #player-progress {
+          width: 0%;
+          height: 100%;
+          background-color: var(--title-bar-active);
+      }
+      #player-close {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        width: 20px;
+        height: 20px;
+        background-color: var(--win-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* --- Mobile Responsive Styles --- */
+      @media (max-width: 768px) {
+        /* Responsive desktop icons */
+        #desktop {
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 20px;
+            padding: 20px;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+
+        .desktop-icon {
+            position: relative !important; /* Override absolute positioning */
+            left: auto !important;
+            top: auto !important;
+            margin: 0;
+        }
+
+        /* Fullscreen windows on mobile */
+        .window {
+            width: 100% !important;
+            height: 100% !important;
+            top: 0 !important;
+            left: 0 !important;
+            max-height: none !important;
+            box-sizing: border-box;
+            border: none !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .window-title-bar {
+            height: 44px;
+            padding: 0 8px;
+        }
+
+        .window-controls button {
+            width: 36px;
+            height: 32px;
+        }
+        
+        .window-content {
+            height: calc(100% - 48px); /* Full height minus title bar */
+            margin-top: 4px;
+            border: none !important;
+        }
+
+        /* Responsive chat window */
+        .window-content.chatroom-body {
+            flex-direction: column-reverse;
+            height: 100%;
+        }
+
+        .chatroom-sidebar {
+            width: 100%;
+            height: 120px;
+            flex-shrink: 0;
+            padding: 8px;
+            box-sizing: border-box;
+            border-top: 2px solid var(--win-border-dark);
+        }
+
+        .chatroom-user-list {
+            margin-top: 0;
+            height: calc(100% - 32px);
+        }
+
+        /* Responsive AIM Window */
+        .aim-window .window-content {
+            flex-direction: column;
+        }
+        .aim-buddy-list {
+            width: 100%;
+            height: 150px;
+            border-right: none;
+            border-bottom: 2px solid var(--win-border-dark);
+            overflow-y: auto;
+        }
+        
+
+        /* Larger touch targets */
+        #taskbar {
+            height: 48px;
+            padding: 0 8px;
+        }
+        
+        #start-button {
+            height: 40px;
+            width: 110px;
+        }
+        
+        #start-button img { height: 32px; width: 32px; }
+        #start-button span { font-size: 16px; }
+
+        #clock {
+            height: 40px;
+            font-size: 16px;
+            padding: 0 12px;
+        }
+
+        #start-menu {
+            width: 100%;
+            bottom: 48px; /* taskbar height */
+            left: 0;
+            box-sizing: border-box;
+        }
+        
+        #start-menu a {
+            padding: 16px;
+            font-size: 16px;
+        }
+        
+        #start-menu img {
+            width: 32px;
+            height: 32px;
+            margin-right: 16px;
+        }
+        
+        #media-player {
+            width: 95%;
+            left: 2.5%;
+            right: 2.5%;
+            bottom: 58px; /* above new taskbar height */
+        }
+
+        .player-controls button {
+            width: 40px;
+            height: 36px;
+        }
+      }
+    </style>
+</head>
+<body>
+    <div id="app-container">
+        <main id="desktop"></main>
+        <footer id="taskbar">
+            <button id="start-button" class="border-outset">
+                <img src="https://win98icons.alexmeub.com/icons/png/windows-0.png" alt="Start" />
+                <span>Start</span>
+            </button>
+            <div id="clock" class="border-inset">
+                <span id="time"></span>
+            </div>
+        </footer>
+    </div>
+
+    <template id="icon-template">
+        <div class="desktop-icon">
+            <div class="icon-image">
+                <div class="jewel-case">
+                    <div class="spine"></div>
+                    <div class="cd-area">
+                        <div class="cd">
+                            <div class="cd-hole"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span class="icon-label"></span>
+        </div>
+    </template>
+
+    <template id="window-template">
+        <div class="window border-outset">
+            <div class="window-title-bar">
+                <span class="window-title-text"></span>
+                <div class="window-controls">
+                    <button class="border-outset" title="Minimize" disabled>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                    <button class="border-outset" title="Maximize" disabled>
+                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg>
+                    </button>
+                    <button class="window-close-btn border-outset" title="Close">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content border-inset">
+                <!-- Content injected by JS -->
+            </div>
+        </div>
+    </template>
+    
+    <template id="photos-folder-template">
+        <div class="window border-outset" style="width: 400px; height: 300px;">
+            <div class="window-title-bar">
+                <span class="window-title-text">selfies :)</span>
+                <div class="window-controls">
+                    <button class="window-close-btn border-outset" title="Close">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content border-inset file-list-container">
+                <!-- File items will be injected here -->
+            </div>
+        </div>
+    </template>
+
+    <template id="photo-viewer-template">
+        <div class="window border-outset" style="width: 500px; height: 400px; max-height: 80vh;">
+            <div class="window-title-bar">
+                <span class="window-title-text"></span>
+                <div class="window-controls">
+                    <button class="window-close-btn border-outset" title="Close">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content border-inset photo-viewer-content">
+                <img src="" alt="Photo view" />
+            </div>
+        </div>
+    </template>
+
+    <template id="notepad-template">
+        <div class="window border-outset" style="height: 300px;">
+            <div class="window-title-bar">
+                <span class="window-title-text">Untitled - Notepad</span>
+                <div class="window-controls">
+                    <button class="border-outset" title="Minimize" disabled>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                    <button class="border-outset" title="Maximize" disabled>
+                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg>
+                    </button>
+                    <button class="window-close-btn border-outset" title="Close">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content border-inset notepad">
+                <textarea class="notepad-textarea" spellcheck="false"></textarea>
+            </div>
+        </div>
+    </template>
+
+    <template id="readme-template">
+        <div class="window border-outset" style="height: 350px; width: 400px;">
+            <div class="window-title-bar">
+                <span class="window-title-text">My Heart.txt - Notepad</span>
+                <div class="window-controls">
+                    <button class="border-outset" title="Minimize" disabled>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                    <button class="border-outset" title="Maximize" disabled>
+                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg>
+                    </button>
+                    <button class="window-close-btn border-outset" title="Close">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content border-inset notepad">
+                <textarea class="notepad-textarea" spellcheck="false" readonly>I am finding out
+That maybe I was wrong
+That I've fallen down
+And I can't do this alone
+Stay with me
+This is what I need, please
+Sing us a song
+And we'll sing it back to you
+We could sing our own
+But what would it be without you?
+Oh-oh
+I am nothing now
+And it's been so long
+Since I've heard a sound
+The sound of my only hope
+This time
+I will be listening
+Sing us a song
+And we'll sing it back to you (sing it back to you)
+We could sing our own
+But what would it be without you?
+Oh, oh
+This heart, it beats
+Beats for only you
+This heart, it beats
+Beats for only you, oh (yeah!)
+This heart, it beats
+Beats for only you
+My heart is yours
+This heart, it beats
+Beats for only you
+My heart is yours (my heart, it beats for you!)
+This heart, it beats
+Beats for only you
+My heart is yours
+This heart, it beats (please, don't go now, please, don't fade away)
+Beats for only you
+My heart (please, don't go now, please don't fade away)
+My heart is yours (please, don't go now! Please, don't fade away!)
+My heart is yours (please, don't go now! Please, don't fade away!)
+My heart is yours (please, don't go! Please, don't fade away!)
+(Please, don't go now! Please, don't fade away!)
+My heart is
+
+- C</textarea>
+            </div>
+        </div>
+    </template>
+
+    <template id="chatroom-template">
+        <div class="window border-outset" style="width: 500px; height: 400px; max-height: 500px;">
+            <div class="window-title-bar">
+                <span class="window-title-text">Chat - "MusicLovers28"</span>
+                <div class="window-controls">
+                    <button class="border-outset" title="Minimize" disabled>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                    <button class="border-outset" title="Maximize" disabled>
+                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg>
+                    </button>
+                    <button class="window-close-btn border-outset" title="Close">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content chatroom-body"> 
+                 <div class="chatroom-main-pane">
+                    <div class="chatroom-log-container border-inset">
+                        <!-- Chat log here -->
+                    </div>
+                    <div class="chatroom-input-container">
+                        <input type="text" class="border-inset" placeholder="A/S/L?" disabled>
+                        <button class="border-outset" disabled>Send</button>
+                    </div>
+                </div>
+                <div class="chatroom-sidebar">
+                    <div class="sidebar-header border-outset">Users Here</div>
+                    <ul class="chatroom-user-list border-inset">
+                        <!-- User list here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <template id="display-properties-template">
+        <div class="window border-outset" style="width: 380px; height: auto; max-height: none;">
+            <div class="window-title-bar">
+                <span class="window-title-text">Display Properties</span>
+                <div class="window-controls">
+                     <button class="window-close-btn border-outset" title="Close">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content border-inset display-properties-content">
+                <div class="wallpaper-preview-container border-inset">
+                    <div class="wallpaper-preview"></div>
+                </div>
+                <div class="wallpaper-controls">
+                    <p>Select a new wallpaper image from your computer.</p>
+                    <input type="file" class="wallpaper-input" accept="image/*" style="display: none;">
+                    <button class="browse-btn border-outset">Browse...</button>
+                    <button class="default-btn border-outset">Default</button>
+                </div>
+            </div>
+            <div class="window-actions">
+                <button class="ok-btn border-outset">OK</button>
+                <button class="cancel-btn border-outset">Cancel</button>
+                <button class="apply-btn border-outset">Apply</button>
+            </div>
+        </div>
+    </template>
+    
+    <template id="myspace-template">
+        <div class="window border-outset myspace-window" style="width: 650px; height: 500px; max-height: 600px;">
+             <div class="window-title-bar">
+                <span class="window-title-text">MySpace - http://www.myspace.com/CarmenXCannibal</span>
+                <div class="window-controls">
+                    <button class="border-outset" title="Minimize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                    <button class="border-outset" title="Maximize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg></button>
+                    <button class="window-close-btn border-outset" title="Close"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                </div>
+            </div>
+            <div class="window-content border-inset myspace-body">
+                <div class="myspace-left-col">
+                    <div class="myspace-profile-header">
+                        <h2>Carmen</h2>
+                        <img src="https://github.com/n0c7u2n3/songs-about-you/blob/main/IMG_0444.JPG?raw=true" alt="Carmen's profile picture">
+                        <ul class="myspace-profile-details">
+                            <span id="myspace-song"><li><b>Mood:</b> apathetic :/</li>
+                            <li><b>Status:</b> <i>"its a dAmN cOld NiGhT tryna figure out this lyfe"</i></li>
+                            <li><b>Song:</b> <i>"The Artist In The Ambulance - Thrice"</span></i></li>
+                        </ul>
+                    </div>
+                     <div class="myspace-module">
+                        <div class="myspace-module-header">Carmen's Blurbs</div>
+                        <div class="myspace-module-content myspace-about-me">
+                            <b>About me:</b><br>
+                            under construktion ugh<br><br>
+                                   <img src="https://64.media.tumblr.com/bfee5125b94f0e4df2c130064f865817/ff2151523813f8f3-15/s400x600/5e4e8e3841d6e4413dc5f41875b5a54d2b14f7ef.gif" alt="zim" width="100" height="150">  
+                            <i>~ i wish you knew the real me ~</i>
+                             
+                        </div>
+                    </div>
+                </div>
+                <div class="myspace-right-col">
+                     <div class="myspace-module">
+                        <div class="myspace-module-header">Carmen's Top 5</div>
+                        <div class="myspace-module-content myspace-top5">
+                            <div class="myspace-friend"><img src="https://github.com/n0c7u2n3/songs-about-you/blob/main/1.jpg?raw=true" alt="Maya Massacre xox"><br>Maya Massacre </div>
+                            <div class="myspace-friend"><img src="https://github.com/n0c7u2n3/songs-about-you/blob/main/84a507d5e99344a07446339bd56ef46e.jpg?raw=true" alt="Damon"><br>DamonXDisasteR <3 </div>
+                            <div class="myspace-friend"><img src="https://github.com/n0c7u2n3/songs-about-you/blob/main/Untitled.jpg?raw=true" alt="Lizzy Love"><br>Lizzy Love</div>
+                            <div class="myspace-friend"><img src="https://github.com/n0c7u2n3/songs-about-you/blob/main/dd917f3800bb3c9db07c4d3c530357a7.jpg?raw=true" alt="Brandon"><br>Brandon</div>
+                            <div class="myspace-friend"><img src="https://github.com/n0c7u2n3/songs-about-you/blob/main/tumblr_269329d8c2f5c911a1c3689a64441aec_4d16170e_1280.jpg?raw=true" alt="Nikol Nailzz"><br>Nikol Nailz</div>
+                            
+                        </div>
+                    </div>
+                     <div class="myspace-module">
+                        <div class="myspace-module-header">Carmen's Comments</div>
+                        <div class="myspace-module-content myspace-comments-list">
+                            <p><b>Sk8rBoi_82:</b> yo that playlist you posted is fire</p>
+                            <p><b>AltGirl_J9:</b> we still on for tower records friday?</p>
+                            <p><b>Maya:</b> call me i have THE tea ☕</p>
+                            <p><b>Liam:</b> u still mad?</p>
+                            <p><b>SpiceFan_97:</b> new mirror pic slaps, can i own lol </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <template id="aim-template">
+        <div class="window border-outset aim-window" style="width: 600px; height: 450px; max-height: 500px;">
+             <div class="window-title-bar">
+                <span class="window-title-text">Instant Messenger</span>
+                <div class="window-controls">
+                    <button class="border-outset" title="Minimize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                    <button class="border-outset" title="Maximize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg></button>
+                    <button class="window-close-btn border-outset" title="Close"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="aim-chat-pane">
+                    <div class="aim-chat-log">
+                        <!-- Messages will be injected here -->
+                    </div>
+                    <div class="aim-input-area">
+                        <textarea disabled></textarea>
+                         <button class="border-outset" disabled>Send</button>
+                    </div>
+                </div>
+                <div class="aim-buddy-list">
+                    <div class="buddy-list-header">Buddy List</div>
+                    <div class="buddy-group">
+                        <div class="buddy-group-name">▶ Buddies</div>
+                        <ul class="buddy-list-items">
+                            <!-- Buddy items will be injected here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="sims-window-template">
+        <div class="window border-outset" style="width: 500px; height: 450px;">
+            <div class="window-title-bar">
+                <span class="window-title-text">Sims 2</span>
+                <div class="window-controls">
+                    <button class="window-close-btn border-outset" title="Close">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content border-inset photo-viewer-content">
+                <img src="https://64.media.tumblr.com/28aa0545eca81fa52a7e97d02d97ba9f/tumblr_pus8ase4UP1rk8c0so1_1280.gif" alt="Sims 2 Gif" />
+            </div>
+        </div>
+    </template>
+
+    <template id="media-player-template">
+        <div id="media-player" class="border-outset">
+            <div id="player-title">Now Playing...</div>
+            <div id="player-song-name"></div>
+            <div class="player-controls">
+                <button id="player-play-pause" class="border-outset">
+                    <svg id="play-icon" width="12" height="12" viewBox="0 0 12 12" fill="black"><path d="M3 2L9 6L3 10V2Z"/></svg>
+                    <svg id="pause-icon" style="display: none;" width="12" height="12" viewBox="0 0 12 12" fill="black"><path d="M3 2H5V10H3V2ZM7 2H9V10H7V2Z"/></svg>
+                </button>
+                <button id="player-volume-down" class="border-outset" title="Volume Down">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6H10" stroke="black" stroke-width="2" stroke-linecap="square"/></svg>
+                </button>
+                <button id="player-volume-up" class="border-outset" title="Volume Up">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 2V10M2 6H10" stroke="black" stroke-width="2" stroke-linecap="square"/></svg>
+                </button>
+                <div id="player-progress-bar" class="border-inset">
+                    <div id="player-progress"></div>
+                </div>
+            </div>
+             <button id="player-close" class="border-outset" title="Close">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+            </button>
+        </div>
+    </template>
+
+    <template id="start-menu-template">
+      <div id="start-menu" class="border-outset">
+        <a href="#" onclick="openDisplayProperties(event); return false;">
+            <img src="https://win98icons.alexmeub.com/icons/png/display_properties-1.png" alt="Display" />
+            <span>Display</span>
+        </a>
+        <a href="#" onclick="openNotepad(event); return false;">
+            <img src="https://win98icons.alexmeub.com/icons/png/notepad-0.png" alt="Notepad" />
+            <span>Notes</span>
+        </a>
+        <a href="#" onclick="openAim(event); return false;">
+            <img src="https://icons.veryicon.com/png/Internet%20%26%20Web/Socialmedia/Aim.png" alt="AIM" />
+            <span>AIM</span>
+        </a>
+        <a href="#" onclick="openChatroom(event); return false;">
+            <img src="https://github.com/n0c7u2n3/songs-about-you/blob/main/Logo_ICQ.svg.png?raw=true" alt="Chat" />
+            <span>Chat</span>
+        </a>
+        <a href="#" onclick="openMySpace(event); return false;">
+            <img src="https://win98icons.alexmeub.com/icons/png/msie1-2.png" alt="internet" />
+            <span>Internet</span>
+        </a>
+        <div class="start-menu-separator"></div>
+        <a href="https://saypodcast.com" target="_blank">
+            <img src="https://win98icons.alexmeub.com/icons/png/microphone_2-1.png" alt="Podcast" />
+            <span>saypodcast.com</span>
+        </a>
+        <div class="start-menu-separator"></div>
+        <a href="#" onclick="event.preventDefault(); return false;">
+            <img src="https://win98icons.alexmeub.com/icons/png/shut_down_cool-4.png" alt="Shut Down" />
+            <span>Shut Down...</span>
+        </a>
+      </div>
+    </template>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const previewUrls = [
+                "https://audio.jukehost.co.uk/4PdvbbpsRsua2yHB3LPWXlu6NhjIlx3s",
+                "https://audio.jukehost.co.uk/VmqnQJKSdlL4BaHyW2gJUOJgI5huQLLG",
+                "https://audio.jukehost.co.uk/GQetsVFQ8URoQT2qkbBwwkRjg9kB7IE0",
+                "https://audio.jukehost.co.uk/uVi0Ph3bA7Qe2JzgNHwqsrEbcJTFOzVM",
+                "https://audio.jukehost.co.uk/4A1Rkjkyy1cwyPD340W64LKutgq2RVj8",
+                "https://audio.jukehost.co.uk/Hs7P8oaHxkWwToOAxHrUZFBp32XNGH8k",
+                "https://audio.jukehost.co.uk/gVqBncKhAx2pgcZcb00wztePEKjMiiHr",
+                "https://audio.jukehost.co.uk/bBFSKlFW2V8QpRzYi3qLgrltlltzBs1a",
+                "https://audio.jukehost.co.uk/NECL7RqgG4fCAxiO4b2OAh6r7kSU8GI2",
+                "https://audio.jukehost.co.uk/F6qxHNX1m80Sm1g5bM6BKL630pM1TWNT",
+                "https://audio.jukehost.co.uk/6KwnbTWOxb6jzJ430uDyiGd4sKABUgUF",
+                "http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/menu.ogg",
+                "http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/race1.ogg",
+                "http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/race2.ogg",
+                "http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/music/race3.ogg",
+            ];
+
+            const albums = [
+                { bandName: "Episode 1", albumTitle: "Songs About Brock", tracks: [
+                    { trackNumber: 1, title: "I'm Yours – Jason Mraz" },
+                    { trackNumber: 2, title: "Swing Life Away – Rise Against" },
+                    { trackNumber: 3, title: "So Contagious – Acceptance" },
+                    { trackNumber: 4, title: "Drive – Incubus" },
+                    { trackNumber: 5, title: "Wonderwall (Remastered) – Oasis" },
+                    { trackNumber: 6, title: "Sex & Candy – Marcy Playground" },
+                    { trackNumber: 7, title: "Work – Jimmy Eat World" },
+                    { trackNumber: 8, title: "If You Could Only See – Tonic" },
+                    { trackNumber: 9, title: "Hello – Adele" },
+                    { trackNumber: 10, title: "Someday You Will Be Loved – Death Cab for Cutie" },
+                    { trackNumber: 11, title: "The Boy Who Blocked His Own Shot – Brand New" }
+                ]},
+                { bandName: "Episode 2", albumTitle: "Songs About Jessica", tracks: [
+                    { trackNumber: 1, title: "Como La Flor – Selena" },
+                    { trackNumber: 2, title: "Boyfriend – Best Coast" },
+                    { trackNumber: 3, title: "We Sink – CHVRCHES" },
+                    { trackNumber: 4, title: "Want You Back – HAIM" },
+                    { trackNumber: 5, title: "Dreams - 2004 Remaster – Fleetwood Mac" },
+                    { trackNumber: 6, title: "Cranes in the Sky – Solange" },
+                    { trackNumber: 7, title: "Location – Khalid" },
+                    { trackNumber: 8, title: "Salad Days – Mac DeMarco" },
+                    { trackNumber: 9, title: "Warm Thoughts – Flume" },
+                    { trackNumber: 10, title: "California English – Vampire Weekend" },
+                    { trackNumber: 11, title: "Stop the Fu*king Car – Circa Survive" },
+                    { trackNumber: 12, title: "Yes I'm Changing – Tame Impala" },
+                    { trackNumber: 13, title: "Chamber Of Reflection – Mac DeMarco" }
+                ]},
+                { bandName: "Episode 3", albumTitle: "Songs About Peter", tracks: [
+                    { trackNumber: 1, title: "Mother & Father – BROODS" },
+                    { trackNumber: 2, title: "I Love You – Faith Evans" },
+                    { trackNumber: 3, title: "Bad Religion – Frank Ocean" },
+                    { trackNumber: 4, title: "I Wanna Be Yours – Arctic Monkeys" },
+                    { trackNumber: 5, title: "When The Sun Don't Shine – Best Coast" },
+                    { trackNumber: 6, title: "Ivy – Frank Ocean" },
+                    { trackNumber: 7, title: "Cada Que... – Belanova" },
+                    { trackNumber: 8, title: "Lies – MARINA" },
+                    { trackNumber: 9, title: "Try – The xx" },
+                    { trackNumber: 10, title: "Not In That Way – Sam Smith" },
+                    { trackNumber: 11, title: "iT's YoU – ZAYN" },
+                    { trackNumber: 12, title: "Good Thing – Sam Smith" },
+                    { trackNumber: 13, title: "With Every Heartbeat – Robyn, Kleerup" },
+                    { trackNumber: 14, title: "Cobarde – Selena" },
+                    { trackNumber: 15, title: "Golden – Jill Scott" }
+                ]},
+                { bandName: "Episode 4", albumTitle: "Songs About Jess", tracks: [
+                    { trackNumber: 1, title: "Other Voices – The Orwells" },
+                    { trackNumber: 2, title: "Mallrats - Audiotree Live Session – The Orwells" },
+                    { trackNumber: 3, title: "Clash the Truth – Beach Fossils" },
+                    { trackNumber: 4, title: "Maxed out on Distractions – Corners" },
+                    { trackNumber: 5, title: "Lets Go Surfing – The Drums" },
+                    { trackNumber: 6, title: "Why Don't You Lie? – The King Khan & BBQ Show" },
+                    { trackNumber: 7, title: "Your Graduation – Modern Baseball" },
+                    { trackNumber: 8, title: "Secret Society – Title Fight" },
+                    { trackNumber: 9, title: "Bad Apple – Basement" },
+                    { trackNumber: 10, title: "Dog – Wavves" },
+                    { trackNumber: 11, title: "I'll Never Belong – The King Khan & BBQ Show" },
+                    { trackNumber: 12, title: "Hit & Run – King Tuff" },
+                    { trackNumber: 13, title: "Girl Afraid - 2011 Remaster – The Smiths" },
+                    { trackNumber: 14, title: "Derailed – Joyce Manor" },
+                    { trackNumber: 15, title: "Beach Community – Joyce Manor" },
+                    { trackNumber: 16, title: "Someday – The Growlers" }
+                ]},
+                { bandName: "Episode 5", albumTitle: "Songs About Paige", tracks: [
+                    { trackNumber: 1, title: "Come On Eileen – Dexys Midnight Runners" },
+                    { trackNumber: 2, title: "Read My Mind – The Killers" },
+                    { trackNumber: 3, title: "Nearly Witches (Ever Since We Met...) – Panic! At The Disco" },
+                    { trackNumber: 4, title: "I Went To The Store One Day – Father John Misty" },
+                    { trackNumber: 5, title: "Medicine – The 1975" },
+                    { trackNumber: 6, title: "Jackie and Wilson – Hozier" },
+                    { trackNumber: 7, title: "Fallingforyou – The 1975" },
+                    { trackNumber: 8, title: "King Kunta – Kendrick Lamar" },
+                    { trackNumber: 9, title: "Chateau Lobby #4 (in C for Two Virgins) – Father John Misty" },
+                    { trackNumber: 10, title: "Heavy Feet – Local Natives" },
+                    { trackNumber: 11, title: "You're Gonna Live Forever in Me – John Mayer" },
+                    { trackNumber: 12, title: "Romeo And Juliet – The Killers" },
+                    { trackNumber: 13, title: "Can't Help Falling in Love – Haley Reinhart" },
+                    { trackNumber: 14, title: "Northern Wind – City and Colour" },
+                    { trackNumber: 15, title: "Falling Slowly – Glen Hansard, Markéta Irglová" },
+                    { trackNumber: 16, title: "A Lack Of Color – Death Cab for Cutie" },
+                    { trackNumber: 17, title: "Re: Stacks – Bon Iver" }
+                ]},
+                { bandName: "Episode 6", albumTitle: "Songs About Henry", tracks: [
+                    { trackNumber: 1, title: "Tonight I'm Getting Over You – Carly Rae Jepsen" },
+                    { trackNumber: 2, title: "Happy Idiot – TV On The Radio" },
+                    { trackNumber: 3, title: "Elastic Heart – Sia" },
+                    { trackNumber: 4, title: "Details in the Fabric (feat. James Morrison) – Jason Mraz, James Morrison" },
+                    { trackNumber: 5, title: "Up&Up – Coldplay" },
+                    { trackNumber: 6, title: "Everglow – Coldplay" },
+                    { trackNumber: 7, "title": "Clean – Taylor Swift" },
+                    { trackNumber: 8, "title": "Shutter Island – Jessie Reyez" },
+                    { trackNumber: 9, "title": "FIGURES – Jessie Reyez" },
+                    { trackNumber: 10, title: "Last Goodbye – Kesha" },
+                    { trackNumber: 11, title: "Goodbye to You – Michelle Branch" },
+                    { trackNumber: 12, title: "We Don't Talk Anymore (feat. Selena Gomez) – Charlie Puth, Selena Gomez" },
+                    { trackNumber: 13, title: "He Wasn't – Avril Lavigne" },
+                    { trackNumber: 14, title: "Ghost – Katy Perry" },
+                    { trackNumber: 15, title: "Emoji of a Wave – John Mayer" }
+                ]},
+                { bandName: "Episode 7", albumTitle: "Songs About Owen", tracks: [
+                    { trackNumber: 1, title: "Archie, Marry Me – Alvvays" },
+                    { trackNumber: 2, title: "Someday – The Growlers" },
+                    { trackNumber: 3, title: "I Belong in Your Arms – Chairlift" },
+                    { trackNumber: 4, title: "Chateau Lobby #4 (in C for Two Virgins) – Father John Misty" },
+                    { trackNumber: 5, title: "Love On Top – Beyoncé" },
+                    { trackNumber: 6, title: "Talking Backwards – Real Estate" },
+                    { trackNumber: 7, title: "So Good At Being in Trouble – Unknown Mortal Orchestra" },
+                    { trackNumber: 8, title: "Down By The Water – The Drums" },
+                    { trackNumber: 9, title: "Warm Water – BANKS" },
+                    { trackNumber: 10, title: "for him. – Troye Sivan, Allday" }
+                ]},
+                { bandName: "Episode 8", albumTitle: "Songs About Justin", tracks: [
+                    { trackNumber: 1, title: "Magnetism – Vacationer" },
+                    { trackNumber: 2, title: "Broken Clocks – SZA" },
+                    { trackNumber: 3, title: "No Love Allowed – Rihanna" },
+                    { trackNumber: 4, title: "Curious – Hayley Kiyoko" },
+                    { trackNumber: 5, title: "Closer – Tegan and Sara" },
+                    { trackNumber: 6, title: "Velvet Elvis – Kacey Musgraves" },
+                    { trackNumber: 7, title: "Femmebot (feat. Dorian Electra and Mykki Blanco) – Charli xcx, Dorian Electra, Mykki Blanco" },
+                    { trackNumber: 8, title: "Tiny Little Bows – Carly Rae Jepsen" },
+                    { trackNumber: 9, title: "Dreams – The Cranberries" },
+                    { trackNumber: 10, title: "Twerkin!!! (feat. Diplo & Sissy Nobby) – Kreayshawn, Diplo, Sissy Nobby" },
+                    { trackNumber: 11, title: "Better Off – Ashlee Simpson" },
+                    { trackNumber: 12, title: "Shakespeare – Miranda Cosgrove" },
+                    { trackNumber: 13, title: "Cool People – Chloe x Halle" },
+                    { trackNumber: 14, title: "Don't You Pretend – Kelly Clarkson" },
+                    { trackNumber: 15, title: "Rock the Boat – Hues Corporation" },
+                    { trackNumber: 16, title: "Flower Tattoo – Mind Bath, Forever" },
+                    { trackNumber: 17, title: "Delicate – Taylor Swift" },
+                    { trackNumber: 18, title: "Brick by Boring Brick – Paramore" }
+                ]}
+            ];
+            
+            const photos = [
+                { filename: 'stickam :p', url: 'https://github.com/n0c7u2n3/songs-about-you/blob/main/IMG_2952.JPG?raw=true' },
+                { filename: 'pfp', url: 'https://github.com/n0c7u2n3/songs-about-you/blob/main/IMG_0444.JPG?raw=true' },
+                { filename: 'hxc', url: 'https://github.com/n0c7u2n3/songs-about-you/blob/main/IMG_0433.JPG?raw=true' },
+                { filename: 'stikammm', url: 'https://github.com/n0c7u2n3/songs-about-you/blob/main/IMG_2951.JPG?raw=true' },
+            ];
+            
+            const aimConversations = {
+              'mixCDz4U': {
+                displayName: 'julian',
+                log: [
+                  { sender: 'buddy', message: 'got the new audio stitched' },
+                  { sender: 'you', message: 'aye' },
+                  { sender: 'buddy', message: 'intro’s clean. voice cracked a little at 01:32 tho' },
+                  { sender: 'you', message: 'leave it' },
+                  { sender: 'buddy', message: 'figured' },
+                ]
+              },
+              'velcro_down': {
+                displayName: 'darrell',
+                log: [
+                  { sender: 'buddy', message: 'just heard the cut!' },
+                  { sender: 'you', message: 'cool, you got the limewire link!' },
+                  { sender: 'buddy', message: 'downloaded it at the same time i was getting that new paramore album lol' },
+                  { sender: 'you', message: 'had to put it on there, file too large ugh' },
+                  { sender: 'buddy', message: 'so cool' },
+                  { sender: 'you', message: 'we’re just... with the times' },
+                  { sender: 'buddy', message: 'no literally. i’m burning it to a disc now' },
+                ]
+              },
+              'glitta_tears': {
+                displayName: 'maya',
+                log: [
+                  { sender: 'buddy', message: 'can i borrow ur cd player for the bus' },
+                  { sender: 'you', message: 'the anti-skip one or the scratched up one' },
+                  { sender: 'buddy', message: 'anti-skip. obviously.' },
+                  { sender: 'you', message: 'don’t leave it in your locker this time' },
+                  { sender: 'buddy', message: 'no promises' },
+                ]
+              },
+              'glowstickriotx': {
+                displayName: 'jess',
+                log: [
+                  { sender: 'buddy', message: 'party at javi’s friday' },
+                  { sender: 'you', message: 'are they letting ppl in this time' },
+                  { sender: 'buddy', message: 'no gatekeeping this time. bring cds' },
+                  { sender: 'you', message: 'i’ll bring the good ones' },
+                  { sender: 'buddy', message: 'don’t bring the ones u made w the weird voicemail intros again' },
+                  { sender: 'you', message: 'those are the good ones...' },
+                ]
+              },
+              'snarehungry': {
+                displayName: 'aaron',
+                log: [
+                  { sender: 'buddy', message: 'we’re meeting at the gates at 9' },
+                  { sender: 'you', message: 'i thought doors opened at 11' },
+                  { sender: 'buddy', message: 'yeah but sarah’s trying to meet nfg at the signing tent' },
+                  { sender: 'you', message: 'okay. i’ll bring sunscreen and you bring snacks' },
+                  { sender: 'buddy', message: 'i’m not your dad' },
+                  { sender: 'you', message: 'hater' },
+                ]
+              }
+            };
+
+            let trackCounter = 0;
+            albums.forEach(album => {
+                album.tracks.forEach(track => {
+                    track.previewUrl = previewUrls[trackCounter++ % previewUrls.length];
+                });
+            });
+
+            const desktop = document.getElementById('desktop');
+            const timeEl = document.getElementById('time');
+            const startButton = document.getElementById('start-button');
+            const iconTemplate = document.getElementById('icon-template');
+            const windowTemplate = document.getElementById('window-template');
+            const mediaPlayerTemplate = document.getElementById('media-player-template');
+            const startMenuTemplate = document.getElementById('start-menu-template');
+            const notepadTemplate = document.getElementById('notepad-template');
+            const readmeTemplate = document.getElementById('readme-template');
+            const displayPropertiesTemplate = document.getElementById('display-properties-template');
+            const chatroomTemplate = document.getElementById('chatroom-template');
+            const myspaceTemplate = document.getElementById('myspace-template');
+            const aimTemplate = document.getElementById('aim-template');
+            const photosFolderTemplate = document.getElementById('photos-folder-template');
+            const photoViewerTemplate = document.getElementById('photo-viewer-template');
+            const simsWindowTemplate = document.getElementById('sims-window-template');
+
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+            let highestZ = 10;
+            let draggedElement = null;
+            let dragOffsetX = 0;
+            let dragOffsetY = 0;
+            let activeWindow = null;
+            let mediaPlayer = null;
+            let audio = null;
+            let startMenu = null;
+            
+            // --- Load persisted wallpaper ---
+            const savedWallpaper = localStorage.getItem('desktopWallpaper');
+            if (savedWallpaper) {
+                desktop.style.backgroundImage = `url(${savedWallpaper})`;
+            }
+
+            // --- Clock ---
+            function updateClock() {
+                const now = new Date();
+                timeEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+            updateClock();
+            setInterval(updateClock, 1000);
+
+            // --- Generic Dragging Logic ---
+            function startDrag(e, element) {
+                if (e.button !== 0) return;
+
+                // Disable window dragging on mobile for a better UX
+                if (window.innerWidth <= 768 && element.classList.contains('window')) {
+                    return;
+                }
+
+                draggedElement = element;
+                draggedElement.style.zIndex = ++highestZ;
+
+                const rect = draggedElement.getBoundingClientRect();
+                dragOffsetX = e.clientX - rect.left;
+                dragOffsetY = e.clientY - rect.top;
+                
+                if (draggedElement.classList.contains('window')) {
+                    draggedElement.querySelector('.window-title-bar').style.cursor = 'grabbing';
+                }
+
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('mouseup', stopDrag, { once: true });
+            }
+
+            function drag(e) {
+                if (!draggedElement) return;
+                 // Set a flag to distinguish a drag from a click
+                draggedElement.dataset.isDragging = 'true';
+
+                const parentRect = desktop.getBoundingClientRect();
+                let x = e.clientX - dragOffsetX;
+                let y = e.clientY - dragOffsetY;
+
+                // Constrain icon dragging to within the desktop area
+                if (draggedElement.classList.contains('desktop-icon')) {
+                    x = Math.max(0, Math.min(x, parentRect.width - draggedElement.offsetWidth));
+                    y = Math.max(0, Math.min(y, parentRect.height - draggedElement.offsetHeight));
+                }
+
+                draggedElement.style.left = `${x}px`;
+                draggedElement.style.top = `${y}px`;
+            }
+
+            function stopDrag() {
+                const el = draggedElement; // Keep a reference to the dragged element
+                if (el) {
+                    if (el.classList.contains('window')) {
+                        el.querySelector('.window-title-bar').style.cursor = 'grab';
+                    }
+                    // Use setTimeout to defer clearing the isDragging flag. This allows the 'click' 
+                    // event to fire and correctly check the flag before it's removed, preventing
+                    // a window from opening after a drag.
+                    setTimeout(() => {
+                        if (el.dataset) {
+                            delete el.dataset.isDragging;
+                        }
+                    }, 0);
+                }
+                draggedElement = null;
+                document.removeEventListener('mousemove', drag);
+            }
+
+            // --- Icon Management ---
+            function deselectAllIcons() {
+                document.querySelectorAll('.desktop-icon.selected').forEach(icon => {
+                    icon.classList.remove('selected');
+                });
+            }
+
+            function createDesktopIcon(config) {
+                 const iconElement = iconTemplate.content.cloneNode(true).firstElementChild;
+                iconElement.querySelector('.icon-label').textContent = config.label;
+                
+                const iconImageContainer = iconElement.querySelector('.icon-image');
+                if (config.imgSrc) {
+                     iconImageContainer.innerHTML = `<img src="${config.imgSrc}" style="width: 80px; height: 80px; image-rendering: pixelated;">`;
+                }
+               
+                iconElement.style.left = config.x;
+                iconElement.style.top = config.y;
+                
+                iconElement.addEventListener('mousedown', (e) => {
+                    if (e.button !== 0) return;
+                    deselectAllIcons();
+                    iconElement.classList.add('selected');
+                    startDrag(e, iconElement);
+                    e.stopPropagation(); 
+                });
+                
+                if (isTouchDevice) {
+                    iconElement.addEventListener('click', () => {
+                        if (iconElement.dataset.isDragging === 'true') return;
+                        config.action();
+                    });
+                } else {
+                    iconElement.addEventListener('dblclick', config.action);
+                }
+                desktop.appendChild(iconElement);
+                return iconElement;
+            }
+
+            albums.forEach((album, index) => {
+                const gridX = index % 10;
+                const gridY = Math.floor(index / 10);
+                createDesktopIcon({
+                    label: album.albumTitle,
+                    x: `${gridX * 110 + 20}px`,
+                    y: `${gridY * 130 + 20}px`,
+                    action: () => openWindow(album)
+                });
+            });
+            
+            // Add App Icons
+            
+            createDesktopIcon({
+                label: 'Internet Explorer',
+                imgSrc: 'https://win98icons.alexmeub.com/icons/png/msie1-2.png',
+                x: '20px',
+                y: '280px',
+                action: () => openMySpace()
+            });
+
+            
+            createDesktopIcon({
+                label: 'Chat',
+                imgSrc: 'https://github.com/n0c7u2n3/songs-about-you/blob/main/Logo_ICQ.svg.png?raw=true',
+                x: '20px',
+                y: '400px',
+                action: () => openChatroom()
+            });
+            
+            createDesktopIcon({
+                label: 'selfies :)',
+                imgSrc: 'https://win98icons.alexmeub.com/icons/png/directory_closed-0.png',
+                x: '130px',
+                y: '280px',
+                action: () => openPhotosFolder()
+            });
+            
+            createDesktopIcon({
+                label: 'My Heart.txt',
+                imgSrc: 'https://win98icons.alexmeub.com/icons/png/notepad_file-1.png',
+                x: '130px',
+                y: '400px',
+                action: () => openReadMe()
+            });
+
+            createDesktopIcon({
+                label: 'AIM',
+                imgSrc: 'https://icons.veryicon.com/png/Internet%20%26%20Web/Socialmedia/Aim.png',
+                x: '240px',
+                y: '280px',
+                action: () => openAim()
+            });
+
+            createDesktopIcon({
+                label: 'Sims 2',
+                imgSrc: 'https://cdn2.steamgriddb.com/icon_thumb/051928341be67dcba03f0e04104d9047.png',
+                x: '240px',
+                y: '400px',
+                action: () => openSimsWindow()
+            });
+
+
+            // --- Window Management ---
+            function setActiveWindow(windowEl) {
+                if (activeWindow && activeWindow !== windowEl) {
+                    const oldTitleBar = activeWindow.querySelector('.window-title-bar');
+                    if(oldTitleBar) {
+                        oldTitleBar.classList.remove('active');
+                        oldTitleBar.classList.add('inactive');
+                    }
+                }
+                if (windowEl) {
+                    const newTitleBar = windowEl.querySelector('.window-title-bar');
+                    newTitleBar.classList.add('active');
+                    newTitleBar.classList.remove('inactive');
+                    windowEl.style.zIndex = ++highestZ;
+                    activeWindow = windowEl;
+                }
+            }
+            
+            function openWindow(album) {
+                const windowId = `window-${album.albumTitle.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                const existingWindow = document.getElementById(windowId);
+                if (existingWindow) {
+                    setActiveWindow(existingWindow);
+                    return;
+                }
+
+                const windowEl = windowTemplate.content.cloneNode(true).firstElementChild;
+                windowEl.id = windowId;
+                windowEl.querySelector('.window-title-text').textContent = `${album.bandName} - ${album.albumTitle}`;
+                
+                const contentEl = windowEl.querySelector('.window-content');
+                contentEl.innerHTML = ''; // Clear template content
+
+                album.tracks.forEach(track => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-list-item';
+                    
+                    const icon = document.createElement('img');
+                    icon.src = 'https://win98icons.alexmeub.com/icons/png/cd_audio_cd-1.png';
+                    icon.alt = 'Music file';
+
+                    const titleSpan = document.createElement('span');
+                    titleSpan.textContent = `${track.trackNumber}. ${track.title}`;
+                    
+                    fileItem.appendChild(icon);
+                    fileItem.appendChild(titleSpan);
+
+                    if (track.previewUrl) {
+                        fileItem.addEventListener('click', () => playTrack(track.title, track.previewUrl));
+                    }
+                    contentEl.appendChild(fileItem);
+                });
+
+
+                const openWindows = document.querySelectorAll('.window').length;
+                windowEl.style.left = `${50 + openWindows * 30}px`;
+                windowEl.style.top = `${50 + openWindows * 30}px`;
+                windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                const titleBar = windowEl.querySelector('.window-title-bar');
+                titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                    if (activeWindow === windowEl) activeWindow = null;
+                    windowEl.remove();
+                });
+                desktop.appendChild(windowEl);
+                setActiveWindow(windowEl);
+            }
+
+            // --- Notepad App ---
+            window.openNotepad = function(event) {
+                event?.preventDefault();
+                const windowId = 'notepad-window';
+                let windowEl = document.getElementById(windowId);
+
+                if (windowEl) {
+                    setActiveWindow(windowEl);
+                } else {
+                    windowEl = notepadTemplate.content.cloneNode(true).firstElementChild;
+                    windowEl.id = windowId;
+
+                    const openWindows = document.querySelectorAll('.window').length;
+                    windowEl.style.left = `${70 + openWindows * 30}px`;
+                    windowEl.style.top = `${70 + openWindows * 30}px`;
+                    
+                    windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                    const titleBar = windowEl.querySelector('.window-title-bar');
+                    titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                    
+                    windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                        if (activeWindow === windowEl) activeWindow = null;
+                        windowEl.remove();
+                    });
+
+                    desktop.appendChild(windowEl);
+                    setActiveWindow(windowEl);
+                }
+                
+                if (startMenu) {
+                    startMenu.remove();
+                    startMenu = null;
+                }
+            }
+            
+            // --- ReadMe App ---
+            window.openReadMe = function() {
+                const windowId = 'readme-window';
+                let windowEl = document.getElementById(windowId);
+
+                if (windowEl) {
+                    setActiveWindow(windowEl);
+                } else {
+                    windowEl = readmeTemplate.content.cloneNode(true).firstElementChild;
+                    windowEl.id = windowId;
+
+                    const openWindows = document.querySelectorAll('.window').length;
+                    windowEl.style.left = `${120 + openWindows * 30}px`;
+                    windowEl.style.top = `${120 + openWindows * 30}px`;
+                    
+                    windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                    const titleBar = windowEl.querySelector('.window-title-bar');
+                    titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                    
+                    windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                        if (activeWindow === windowEl) activeWindow = null;
+                        windowEl.remove();
+                    });
+
+                    desktop.appendChild(windowEl);
+                    setActiveWindow(windowEl);
+                }
+            }
+            
+             // --- Chatroom App ---
+            window.openChatroom = function(event) {
+                event?.preventDefault();
+                const windowId = 'chatroom-window';
+                let windowEl = document.getElementById(windowId);
+
+                if (windowEl) {
+                    setActiveWindow(windowEl);
+                } else {
+                    windowEl = chatroomTemplate.content.cloneNode(true).firstElementChild;
+                    windowEl.id = windowId;
+                    
+                    const chatLogContainer = windowEl.querySelector('.chatroom-log-container');
+                    const userListEl = windowEl.querySelector('.chatroom-user-list');
+
+                    const chatLog = [
+ { user: 'Sk8rBoi_82', color: '#00FFFF', message: 'yo is this thing even working? haha' },
+{ user: 'SpiceFan_97', color: '#FF00FF', message: 'lmao yeah you’re on. just got back from blockbuster. chaos as usual.' },
+{ user: 'AltGirl_J9', color: '#A52A2A', message: 'ugh, did they even have *Reality Bites* this time?' },
+{ user: 'CD_Master', color: '#FFFF00', message: 'nope. but I snagged the Empire Records soundtrack on cassette lol' },
+{ user: 'CD_Master', color: '#FFFF00', message: 'tell me about it. anyway, did you guys hear that new radio show? "Songs About You"?' },
+{ user: 'Sk8rBoi_82', color: '#00FFFF', message: 'NO WAY! I heard the commercial on the radio. the one where they talk about mix tapes?' },
+{ user: 'SpiceFan_97', color: '#FF00FF', message: 'not mix tapes, dork. BURNED CDs. get with the times! it is 1997!!' },
+{ user: 'DJ_MellowTone', color: '#7FFFD4', message: 'yo has anyone else been listening to that radio show “Songs About You”?' },
+{ user: 'SpiceFan_97', color: '#FF00FF', message: 'yesss! they were talking about burned CDs last night. it was all so dramatic haha' },
+{ user: 'Sk8rBoi_82', color: '#00FFFF', message: 'wait I heard the ad! they were like “what did *you* put on your CD for your crush?” lmao' },
+{ user: 'Indie_Chi', color: '#BC8F8F', message: 'I’d die if someone gave me a CD with Mazzy Star on it. just float away into the fog' },
+{ user: 'CD_Master', color: '#FFFF00', message: 'this guy on the show made one for some girl named Sarah and led with “Wonderwall”… like bruh, try harder' },
+{ user: 'Sk8rBoi_82', color: '#00FFFF', message: 'Jewel better be track 2 tho. can’t go wrong with “You Were Meant for Me”' },
+{ user: 'VinylVampire', color: '#FF4500', message: 'lol y’all and your CDs. I’ll stick to mixtapes on Maxell. analog forever' },
+{ user: 'DJ_MellowTone', color: '#7FFFD4', message: 'nah I burned one for my neighbor and opened with “Return of the Mack.” 90s R&B supremacy.' },
+{ user: 'AltGirl_J9', color: '#A52A2A', message: 'mine would start with “Fade Into You” and end with Radiohead. if you don’t cry, you’re not the one.' },
+{ user: 'GrungeCore88', color: '#708090', message: 'ngl, I’d just put Soundgarden on repeat. mood setter.' },
+{ user: 'SpiceFan_97', color: '#FF00FF', message: 'as long as there’s no Limp Bizkit I’m good 🙃' },
+{ user: 'CD_Master', color: '#FFFF00', message: 'I just finished mine. it starts with “Semi-Charmed Life” then fades into “Criminal” by Fiona Apple. a journey.' },
+{ user: 'VinylVampire', color: '#FF4500', message: 'respect. as long as you didn’t put Smash Mouth on there, we’re still friends' },
+{ user: 'Sk8rBoi_82', color: '#00FFFF', message: 'yo don’t hate on “Walkin’ on the Sun” 👀' },
+{ user: 'Indie_Chi', color: '#BC8F8F', message: 'ugh this makes me wanna go to Tower Records and blow $40 I don’t have' },
+{ user: 'System', color: '#FF6347', message: '*** Sk8rBoi_82 is experiencing severe lag. ***' },
+{ user: 'Sk8rBoi_82', color: '#00FFFF', message: 'ok dial-up is being a jerk. catch ya later' },
+{ user: 'System', color: '#FF6347', message: '*** Sk8rBoi_82 has left the chat. ***' },
+{ user: 'GrungeCore88', color: '#708090', message: 'peace out sk8rboi' },
+{ user: 'AltGirl_J9', color: '#A52A2A', message: 'gonna burn a CD now and pretend someone asked for it' },
+{ user: 'SpiceFan_97', color: '#FF00FF', message: 'mood.' },
+{ user: 'System', color: '#FF6347', message: '*** chat will auto-log out in 5 minutes due to inactivity ***' }
+                    ];
+
+                    const users = [...new Set(chatLog.map(entry => entry.user).filter(user => user !== 'System'))];
+                    
+                    userListEl.innerHTML = '';
+                    users.forEach(user => {
+                        const li = document.createElement('li');
+                        li.textContent = user;
+                        userListEl.appendChild(li);
+                    });
+
+                    windowEl.querySelector('.sidebar-header').textContent = `Users Here: ${users.length}`;
+
+                    chatLog.forEach(entry => {
+                        const p = document.createElement('p');
+                        if(entry.user === 'System') {
+                            p.className = 'system-message';
+                            p.textContent = entry.message;
+                        } else {
+                            const userSpan = document.createElement('span');
+                            userSpan.className = 'chat-user';
+                            userSpan.style.color = entry.color;
+                            userSpan.textContent = `${entry.user}: `;
+
+                            const textSpan = document.createElement('span');
+                            textSpan.className = 'chat-text';
+                            textSpan.textContent = entry.message;
+                            
+                            p.appendChild(userSpan);
+                            p.appendChild(textSpan);
+                        }
+                        chatLogContainer.appendChild(p);
+                    });
+
+
+                    const openWindows = document.querySelectorAll('.window').length;
+                    windowEl.style.left = `${90 + openWindows * 30}px`;
+                    windowEl.style.top = `${90 + openWindows * 30}px`;
+                    
+                    windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                    const titleBar = windowEl.querySelector('.window-title-bar');
+                    titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                    
+                    windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                        if (activeWindow === windowEl) activeWindow = null;
+                        windowEl.remove();
+                    });
+
+                    desktop.appendChild(windowEl);
+                    setActiveWindow(windowEl);
+                }
+                
+                if (startMenu) {
+                    startMenu.remove();
+                    startMenu = null;
+                }
+            }
+            
+             // --- Display Properties App ---
+            window.openDisplayProperties = function(event) {
+                event?.preventDefault();
+                const windowId = 'display-properties-window';
+                if (document.getElementById(windowId)) {
+                    setActiveWindow(document.getElementById(windowId));
+                    return;
+                }
+
+                const windowEl = displayPropertiesTemplate.content.cloneNode(true).firstElementChild;
+                windowEl.id = windowId;
+                
+                let newWallpaperDataUrl = null;
+                const previewEl = windowEl.querySelector('.wallpaper-preview');
+                const currentBg = localStorage.getItem('desktopWallpaper');
+                if (currentBg) {
+                     previewEl.style.backgroundImage = `url(${currentBg})`;
+                }
+
+                const applyChanges = () => {
+                    if (newWallpaperDataUrl === 'default') {
+                        desktop.style.backgroundImage = '';
+                        localStorage.removeItem('desktopWallpaper');
+                    } else if (newWallpaperDataUrl) {
+                        desktop.style.backgroundImage = `url(${newWallpaperDataUrl})`;
+                        localStorage.setItem('desktopWallpaper', newWallpaperDataUrl);
+                    }
+                };
+
+                const closeWindow = () => {
+                    if (activeWindow === windowEl) activeWindow = null;
+                    windowEl.remove();
+                };
+
+                const fileInput = windowEl.querySelector('.wallpaper-input');
+                windowEl.querySelector('.browse-btn').addEventListener('click', () => fileInput.click());
+                windowEl.querySelector('.default-btn').addEventListener('click', () => {
+                    newWallpaperDataUrl = 'default';
+                    previewEl.style.backgroundImage = '';
+                });
+                
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = (readEvent) => {
+                            newWallpaperDataUrl = readEvent.target.result;
+                            previewEl.style.backgroundImage = `url(${newWallpaperDataUrl})`;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+                windowEl.querySelector('.apply-btn').addEventListener('click', applyChanges);
+                windowEl.querySelector('.ok-btn').addEventListener('click', () => {
+                    applyChanges();
+                    closeWindow();
+                });
+                windowEl.querySelector('.cancel-btn').addEventListener('click', closeWindow);
+
+
+                const openWindows = document.querySelectorAll('.window').length;
+                windowEl.style.left = `${80 + openWindows * 30}px`;
+                windowEl.style.top = `${80 + openWindows * 30}px`;
+                
+                windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                const titleBar = windowEl.querySelector('.window-title-bar');
+                titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                
+                windowEl.querySelector('.window-close-btn').addEventListener('click', closeWindow);
+
+                desktop.appendChild(windowEl);
+                setActiveWindow(windowEl);
+                
+                if (startMenu) {
+                    startMenu.remove();
+                    startMenu = null;
+                }
+            }
+            
+            // --- Photos App ---
+            window.openPhotosFolder = function() {
+                const windowId = 'photos-folder-window';
+                if (document.getElementById(windowId)) {
+                    setActiveWindow(document.getElementById(windowId));
+                    return;
+                }
+
+                const windowEl = photosFolderTemplate.content.cloneNode(true).firstElementChild;
+                windowEl.id = windowId;
+                const fileListContainer = windowEl.querySelector('.file-list-container');
+
+                photos.forEach(photo => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <img src="${photo.url}" alt="${photo.filename} thumbnail">
+                        <span>${photo.filename}</span>
+                    `;
+
+                    const openAction = () => {
+                        if (fileItem.dataset.isDragging === 'true') return;
+                        openPhotoViewer(photo);
+                    };
+
+                    if (isTouchDevice) {
+                        fileItem.addEventListener('click', openAction);
+                    } else {
+                        fileItem.addEventListener('dblclick', openAction);
+                    }
+
+                    fileListContainer.appendChild(fileItem);
+                });
+                
+                const openWindows = document.querySelectorAll('.window').length;
+                windowEl.style.left = `${110 + openWindows * 30}px`;
+                windowEl.style.top = `${110 + openWindows * 30}px`;
+                
+                windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                const titleBar = windowEl.querySelector('.window-title-bar');
+                titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                    if (activeWindow === windowEl) activeWindow = null;
+                    windowEl.remove();
+                });
+
+                desktop.appendChild(windowEl);
+                setActiveWindow(windowEl);
+            };
+
+            function openPhotoViewer(photo) {
+                 const windowId = `photo-viewer-${photo.filename.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                 if (document.getElementById(windowId)) {
+                    setActiveWindow(document.getElementById(windowId));
+                    return;
+                }
+
+                const windowEl = photoViewerTemplate.content.cloneNode(true).firstElementChild;
+                windowEl.id = windowId;
+
+                windowEl.querySelector('.window-title-text').textContent = photo.filename;
+                windowEl.querySelector('img').src = photo.url;
+                windowEl.querySelector('img').alt = photo.filename;
+
+                const openWindows = document.querySelectorAll('.window').length;
+                windowEl.style.left = `${130 + openWindows * 30}px`;
+                windowEl.style.top = `${130 + openWindows * 30}px`;
+                
+                windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                const titleBar = windowEl.querySelector('.window-title-bar');
+                titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                    if (activeWindow === windowEl) activeWindow = null;
+                    windowEl.remove();
+                });
+
+                desktop.appendChild(windowEl);
+                setActiveWindow(windowEl);
+            }
+
+            // --- MySpace App ---
+            window.openMySpace = function(event) {
+                event?.preventDefault();
+                const windowId = 'myspace-window';
+                let windowEl = document.getElementById(windowId);
+                const mySpaceSongUrl = 'https://audio.jukehost.co.uk/DEGSOZnCvY7B9xOdJtOOJuHQUH6TavIA';
+
+                if (windowEl) {
+                    setActiveWindow(windowEl);
+                } else {
+                    windowEl = myspaceTemplate.content.cloneNode(true).firstElementChild;
+                    windowEl.id = windowId;
+
+                    const openWindows = document.querySelectorAll('.window').length;
+                    windowEl.style.left = `${100 + openWindows * 30}px`;
+                    windowEl.style.top = `${100 + openWindows * 30}px`;
+                    
+                    windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                    const titleBar = windowEl.querySelector('.window-title-bar');
+                    titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                    
+                    const closeBtn = windowEl.querySelector('.window-close-btn');
+                    closeBtn.addEventListener('click', () => {
+                        if (activeWindow === windowEl) activeWindow = null;
+                        windowEl.remove();
+                        // Stop the MySpace song if it's currently playing
+                        if (audio && audio.src === mySpaceSongUrl) {
+                            audio.pause();
+                            audio.src = '';
+                            if (mediaPlayer) {
+                                mediaPlayer.classList.remove('visible');
+                            }
+                        }
+                    });
+
+                    desktop.appendChild(windowEl);
+                    setActiveWindow(windowEl);
+                    playTrack("The Artist In The Ambulance - Thrice", mySpaceSongUrl);
+                }
+                
+                if (startMenu) {
+                    startMenu.remove();
+                    startMenu = null;
+                }
+            }
+            
+            // --- AIM App ---
+            window.openAim = function(event) {
+                event?.preventDefault();
+                const windowId = 'aim-window';
+                if (document.getElementById(windowId)) {
+                    setActiveWindow(document.getElementById(windowId));
+                    return;
+                }
+
+                const windowEl = aimTemplate.content.cloneNode(true).firstElementChild;
+                windowEl.id = windowId;
+
+                const chatLogEl = windowEl.querySelector('.aim-chat-log');
+                const buddyListEl = windowEl.querySelector('.buddy-list-items');
+                const titleTextEl = windowEl.querySelector('.window-title-text');
+                let currentSelectedBuddy = null;
+
+                function displayConversation(username) {
+                    const conversation = aimConversations[username];
+                    if (!conversation) return;
+
+                    // Update window title
+                    titleTextEl.textContent = `${username} - Instant Message`;
+                    
+                    // Update buddy list selection
+                    if (currentSelectedBuddy) {
+                        currentSelectedBuddy.classList.remove('selected');
+                    }
+                    currentSelectedBuddy = buddyListEl.querySelector(`[data-username="${username}"]`);
+                    if(currentSelectedBuddy) {
+                       currentSelectedBuddy.classList.add('selected');
+                    }
+
+
+                    // Render messages
+                    chatLogEl.innerHTML = '';
+                    conversation.log.forEach(msg => {
+                        const msgEl = document.createElement('div');
+                        msgEl.classList.add('aim-message', msg.sender); // 'you' or 'buddy'
+                        
+                        const usernameEl = document.createElement('span');
+                        usernameEl.className = 'username';
+                        usernameEl.textContent = msg.sender === 'you' ? 'SAY_Host: ' : `${username}: `;
+                        
+                        const textEl = document.createTextNode(msg.message);
+                        
+                        msgEl.appendChild(usernameEl);
+                        msgEl.appendChild(textEl);
+                        chatLogEl.appendChild(msgEl);
+                    });
+                    chatLogEl.scrollTop = chatLogEl.scrollHeight;
+                }
+
+                Object.keys(aimConversations).forEach(username => {
+                    const buddy = aimConversations[username];
+                    const buddyItem = document.createElement('li');
+                    buddyItem.className = 'buddy-item';
+                    buddyItem.textContent = `${buddy.displayName} (${username})`;
+                    buddyItem.dataset.username = username;
+                    buddyItem.addEventListener('click', () => displayConversation(username));
+                    buddyListEl.appendChild(buddyItem);
+                });
+
+                const openWindows = document.querySelectorAll('.window').length;
+                windowEl.style.left = `${140 + openWindows * 30}px`;
+                windowEl.style.top = `${140 + openWindows * 30}px`;
+
+                windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                const titleBar = windowEl.querySelector('.window-title-bar');
+                titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                    if (activeWindow === windowEl) activeWindow = null;
+                    windowEl.remove();
+                });
+
+                desktop.appendChild(windowEl);
+                setActiveWindow(windowEl);
+                
+                // Display the first conversation by default
+                const firstUser = Object.keys(aimConversations)[0];
+                if(firstUser) {
+                    displayConversation(firstUser);
+                }
+
+                if (startMenu) {
+                    startMenu.remove();
+                    startMenu = null;
+                }
+            }
+            
+            // --- Sims 2 App ---
+            window.openSimsWindow = function() {
+                const windowId = 'sims-window';
+                let windowEl = document.getElementById(windowId);
+
+                if (windowEl) {
+                    setActiveWindow(windowEl);
+                    return;
+                }
+
+                windowEl = simsWindowTemplate.content.cloneNode(true).firstElementChild;
+                windowEl.id = windowId;
+
+                const openWindows = document.querySelectorAll('.window').length;
+                windowEl.style.left = `${150 + openWindows * 30}px`;
+                windowEl.style.top = `${150 + openWindows * 30}px`;
+                
+                windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                const titleBar = windowEl.querySelector('.window-title-bar');
+                titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                
+                windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                    if (activeWindow === windowEl) activeWindow = null;
+                    windowEl.remove();
+                });
+
+                desktop.appendChild(windowEl);
+                setActiveWindow(windowEl);
+            }
+
+
+            // --- Media Player ---
+            function createMediaPlayer() {
+                if (mediaPlayer) return;
+
+                mediaPlayer = mediaPlayerTemplate.content.cloneNode(true).firstElementChild;
+                document.body.appendChild(mediaPlayer); // Append to body to ensure it's on top
+
+                const playPauseBtn = mediaPlayer.querySelector('#player-play-pause');
+                const closeBtn = mediaPlayer.querySelector('#player-close');
+                const playIcon = mediaPlayer.querySelector('#play-icon');
+                const pauseIcon = mediaPlayer.querySelector('#pause-icon');
+                const volumeDownBtn = mediaPlayer.querySelector('#player-volume-down');
+                const volumeUpBtn = mediaPlayer.querySelector('#player-volume-up');
+
+                audio = new Audio();
+                audio.volume = 0.5; // Set default volume
+
+                playPauseBtn.addEventListener('click', () => {
+                    if (audio.paused) audio.play();
+                    else audio.pause();
+                });
+
+                volumeDownBtn.addEventListener('click', () => {
+                    audio.volume = Math.max(0, audio.volume - 0.1);
+                });
+
+                volumeUpBtn.addEventListener('click', () => {
+                    audio.volume = Math.min(1, audio.volume + 0.1);
+                });
+
+                closeBtn.addEventListener('click', () => {
+                    audio.pause();
+                    audio.src = "";
+                    mediaPlayer.classList.remove('visible');
+                });
+                
+                audio.addEventListener('play', () => {
+                    playIcon.style.display = 'none';
+                    pauseIcon.style.display = 'block';
+                });
+
+                audio.addEventListener('pause', () => {
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                });
+
+                audio.addEventListener('timeupdate', () => {
+                    if (audio.duration) {
+                        const progress = (audio.currentTime / audio.duration) * 100;
+                        mediaPlayer.querySelector('#player-progress').style.width = `${progress}%`;
+                    }
+                });
+
+                audio.addEventListener('ended', () => {
+                     mediaPlayer.classList.remove('visible');
+                     mediaPlayer.querySelector('#player-progress').style.width = '0%';
+                });
+            }
+
+            function playTrack(title, url) {
+                if (!mediaPlayer) {
+                    createMediaPlayer();
+                }
+                mediaPlayer.querySelector('#player-song-name').textContent = title;
+                mediaPlayer.classList.add('visible');
+                audio.src = url;
+                audio.play().catch(e => console.error("Error playing audio:", e));
+            }
+
+            // --- Start Menu ---
+            function toggleStartMenu() {
+                if (startMenu) {
+                    startMenu.remove();
+                    startMenu = null;
+                } else {
+                    startMenu = startMenuTemplate.content.cloneNode(true).firstElementChild;
+                    desktop.appendChild(startMenu);
+                }
+            }
+
+            startButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleStartMenu();
+            });
+
+            desktop.addEventListener('mousedown', (e) => {
+                if (e.target === desktop) {
+                    deselectAllIcons();
+                    if(startMenu) {
+                        startMenu.remove();
+                        startMenu = null;
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>oogleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 
     <style>
       :root {
