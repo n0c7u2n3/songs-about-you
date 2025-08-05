@@ -190,29 +190,27 @@
         padding: 4px;
         overflow-y: auto;
       }
-      .window-content ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        color: black;
-        font-size: 14px;
-      }
-      .window-content li {
-        display: flex;
-        padding: 2px 4px;
-      }
-      .window-content li.has-preview:hover {
-        background-color: var(--title-bar-active);
-        color: white;
-        cursor: pointer;
-      }
-      .window-content .track-number {
-        width: 32px;
-        flex-shrink: 0;
-        text-align: right;
-        margin-right: 8px;
-      }
       
+      /* Single-column File List for Albums */
+      .file-list-item {
+          display: flex;
+          align-items: center;
+          padding: 4px 8px;
+          cursor: pointer;
+          color: black;
+          font-size: 14px;
+      }
+      .file-list-item:hover {
+          background-color: var(--title-bar-active);
+          color: white;
+      }
+      .file-list-item img {
+          width: 20px;
+          height: 20px;
+          margin-right: 8px;
+          image-rendering: pixelated;
+      }
+
       /* Notepad styles */
       .window-content.notepad {
           padding: 0;
@@ -793,7 +791,7 @@
                 </div>
             </div>
             <div class="window-content border-inset">
-                <ul class="track-list"></ul>
+                <!-- Content injected by JS -->
             </div>
         </div>
     </template>
@@ -855,7 +853,7 @@
     <template id="chatroom-template">
         <div class="window border-outset" style="width: 500px; height: 400px; max-height: 500px;">
             <div class="window-title-bar">
-                <span class="window-title-text">Chatroom - "MusicLovers21"</span>
+                <span class="window-title-text">AOL Chat - "MusicLovers28"</span>
                 <div class="window-controls">
                     <button class="border-outset" title="Minimize" disabled>
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
@@ -1012,8 +1010,8 @@
             <span>Notes</span>
         </a>
         <a href="#" onclick="openChatroom(event); return false;">
-            <img src="https://github.com/n0c7u2n3/songs-about-you/blob/main/Logo_ICQ.svg.png?raw=true" alt="Chatrooms" />
-            <span>Chat</span>
+            <img src="https://win98icons.alexmeub.com/icons/png/users-1.png" alt="Chatrooms" />
+            <span>Chatrooms</span>
         </a>
         <a href="#" onclick="openMySpace(event); return false;">
             <img src="https://win98icons.alexmeub.com/icons/png/msie1-2.png" alt="internet" />
@@ -1409,17 +1407,30 @@
                 const windowEl = windowTemplate.content.cloneNode(true).firstElementChild;
                 windowEl.id = windowId;
                 windowEl.querySelector('.window-title-text').textContent = `${album.bandName} - ${album.albumTitle}`;
-                const trackListEl = windowEl.querySelector('.track-list');
+                
+                const contentEl = windowEl.querySelector('.window-content');
+                contentEl.innerHTML = ''; // Clear template content
 
                 album.tracks.forEach(track => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<span class="track-number">${track.trackNumber}.</span><span>${track.title}</span>`;
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-list-item';
+                    
+                    const icon = document.createElement('img');
+                    icon.src = 'https://win98icons.alexmeub.com/icons/png/cd_audio_cd-1.png';
+                    icon.alt = 'Music file';
+
+                    const titleSpan = document.createElement('span');
+                    titleSpan.textContent = `${track.trackNumber}. ${track.title}`;
+                    
+                    fileItem.appendChild(icon);
+                    fileItem.appendChild(titleSpan);
+
                     if (track.previewUrl) {
-                        li.classList.add('has-preview');
-                        li.addEventListener('click', () => playTrack(track.title, track.previewUrl));
+                        fileItem.addEventListener('click', () => playTrack(track.title, track.previewUrl));
                     }
-                    trackListEl.appendChild(li);
+                    contentEl.appendChild(fileItem);
                 });
+
 
                 const openWindows = document.querySelectorAll('.window').length;
                 windowEl.style.left = `${50 + openWindows * 30}px`;
