@@ -1511,6 +1511,28 @@ My heart is
             </div>
         </div>
     </template>
+    
+    <template id="skifree-template">
+        <div class="window border-outset" style="width: 580px; height: 450px;">
+            <div class="window-title-bar">
+                <span class="window-title-text">SkiFree (esc to leave window)</span>
+                <div class="window-controls">
+                    <button class="border-outset" title="Minimize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                    <button class="border-outset" title="Maximize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg></button>
+                    <button class="window-close-btn border-outset" title="Close"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                </div>
+            </div>
+            <div class="window-content border-inset" style="padding: 0; overflow: hidden;">
+                <iframe src="https://archive.org/embed/win3_SKIFREE"
+                        style="width: 100%; height: 100%;"
+                        frameborder="0"
+                        webkitallowfullscreen="true"
+                        mozallowfullscreen="true"
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </template>
 
 
     <template id="media-player-template">
@@ -1551,6 +1573,10 @@ My heart is
         <a href="#" onclick="openAim(event); return false;">
             <img src="https://icons.veryicon.com/png/Internet%20%26%20Web/Socialmedia/Aim.png" alt="AIM" />
             <span>AIM</span>
+        </a>
+        <a href="#" onclick="openSkiFree(event); return false;">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsnE5rYHrv8fx5lggwQpzCRMhixq96sJTAdA&s" alt="SkiFree" />
+            <span>SkiFree</span>
         </a>
         <a href="#" onclick="openChatroom(event); return false;">
             <img src="https://github.com/n0c7u2n3/songs-about-you/blob/main/Logo_ICQ.svg.png?raw=true" alt="Chat" />
@@ -1816,6 +1842,7 @@ My heart is
             const photoViewerTemplate = document.getElementById('photo-viewer-template');
             const simsWindowTemplate = document.getElementById('sims-window-template');
             const limewireTemplate = document.getElementById('limewire-template');
+            const skifreeTemplate = document.getElementById('skifree-template');
 
             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
@@ -2011,6 +2038,14 @@ My heart is
                 x: '350px',
                 y: '280px',
                 action: () => openLimeWire()
+            });
+
+            createDesktopIcon({
+                label: 'SkiFree',
+                imgSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRsnE5rYHrv8fx5lggwQpzCRMhixq96sJTAdA&s',
+                x: '350px',
+                y: '400px',
+                action: () => openSkiFree()
             });
 
 
@@ -2603,6 +2638,42 @@ My heart is
 
                 desktop.appendChild(windowEl);
                 setActiveWindow(windowEl);
+            }
+
+            // --- SkiFree App ---
+            window.openSkiFree = function(event) {
+                event?.preventDefault();
+                const windowId = 'skifree-window';
+                let windowEl = document.getElementById(windowId);
+
+                if (windowEl) {
+                    setActiveWindow(windowEl);
+                    return;
+                }
+
+                windowEl = skifreeTemplate.content.cloneNode(true).firstElementChild;
+                windowEl.id = windowId;
+
+                const openWindows = document.querySelectorAll('.window').length;
+                windowEl.style.left = `${170 + openWindows * 30}px`;
+                windowEl.style.top = `${170 + openWindows * 30}px`;
+                
+                windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                const titleBar = windowEl.querySelector('.window-title-bar');
+                titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                
+                windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                    if (activeWindow === windowEl) activeWindow = null;
+                    windowEl.remove();
+                });
+
+                desktop.appendChild(windowEl);
+                setActiveWindow(windowEl);
+                
+                if (startMenu) {
+                    startMenu.remove();
+                    startMenu = null;
+                }
             }
 
 
