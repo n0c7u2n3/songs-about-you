@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Songs About You</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&family=Jersey+25&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 
     <style>
       :root {
@@ -18,12 +18,13 @@
         --title-bar-active: #000080;
         --title-bar-inactive: #808080;
         --desktop-bg: #008080;
-        
       }
 
       body {
-        font-family: 'Jersey 25', sans-serif;
-        background-color: var(--desktop-bg);
+        font-family: 'Inter', sans-serif;
+        font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
         height: 100vh;
         width: 100vw;
         overflow: hidden;
@@ -42,6 +43,10 @@
         position: relative;
         width: 100%;
         height: 100%;
+        background-color: var(--desktop-bg);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
       }
 
       /* Outset Border Style */
@@ -67,14 +72,14 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 80px;
+        width: 100px;
         cursor: pointer;
         padding: 4px;
       }
       .desktop-icon .icon-image {
         position: relative;
-        width: 64px;
-        height: 64px;
+        width: 80px;
+        height: 80px;
         margin-bottom: 8px;
       }
       .desktop-icon .jewel-case {
@@ -88,7 +93,7 @@
         display: flex;
       }
       .desktop-icon .spine {
-        width: 6px;
+        width: 8px;
         height: 100%;
         background-color: rgba(50, 50, 50, 0.7);
       }
@@ -99,8 +104,8 @@
         justify-content: center;
       }
       .desktop-icon .cd {
-        width: 50px;
-        height: 50px;
+        width: 65px;
+        height: 65px;
         border-radius: 50%;
         background: linear-gradient(45deg, #a7b5d1, #7c89a7, #d4dcf0);
         display: flex;
@@ -109,8 +114,8 @@
         box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
       }
       .desktop-icon .cd-hole {
-        width: 16px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
         background: var(--win-bg);
         border-radius: 50%;
         border: 2px solid #aaa;
@@ -118,8 +123,8 @@
       .desktop-icon .icon-label {
         color: white;
         text-align: center;
-        font-size: 12px;
-        padding: 1px 3px;
+        font-size: 14px;
+        padding: 2px 4px;
         word-wrap: break-word;
       }
       .desktop-icon.selected > .icon-label {
@@ -225,6 +230,55 @@
           outline: none;
       }
 
+      /* Display Properties Window */
+        .display-properties-content {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            color: black;
+        }
+        .wallpaper-preview-container {
+            height: 180px;
+            width: 100%;
+            background-color: #000;
+            padding: 4px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .wallpaper-preview {
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: var(--desktop-bg);
+        }
+        .wallpaper-controls {
+            margin-top: 8px;
+        }
+        .wallpaper-controls p {
+            margin: 0 0 8px 0;
+            font-size: 12px;
+        }
+        .wallpaper-controls button {
+            margin-right: 5px;
+            height: 24px;
+            padding: 0 8px;
+            font-size: 12px;
+        }
+        .window-actions {
+            display: flex;
+            justify-content: flex-end;
+            padding: 6px 4px;
+        }
+        .window-actions button {
+            width: 80px;
+            height: 24px;
+            margin-left: 6px;
+            font-size: 12px;
+        }
+
+
       /* Taskbar */
       #taskbar {
         width: 100%;
@@ -236,7 +290,6 @@
         justify-content: space-between;
         padding: 0 4px;
         z-index: 10000;
-        box-sizing: border-box;
       }
       #start-button {
         height: 32px;
@@ -367,101 +420,6 @@
         align-items: center;
         justify-content: center;
       }
-
-      /* Responsive Mobile Styles */
-      @media (max-width: 768px) {
-        body {
-            overflow-y: auto;
-        }
-        #desktop {
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            gap: 12px;
-            padding: 12px;
-            position: static;
-            height: auto;
-        }
-        .desktop-icon {
-            position: static;
-            width: auto;
-            flex-direction: row;
-            align-items: center;
-            background-color: var(--win-bg);
-            padding: 8px;
-            border: 1px solid var(--win-border-dark);
-            box-shadow: 1px 1px 0 1px var(--win-border-dark);
-        }
-        .desktop-icon:active {
-            border-color: var(--win-border-dark) var(--win-border-light) var(--win-border-light) var(--win-border-dark);
-            box-shadow: none;
-        }
-        .desktop-icon .icon-label {
-            color: black;
-            flex-grow: 1;
-            text-align: left;
-            font-size: 14px;
-            word-wrap: normal;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .desktop-icon.selected > .icon-label {
-            background-color: transparent;
-        }
-        .desktop-icon .icon-image {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 0;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-        .desktop-icon .cd {
-            width: 40px;
-            height: 40px;
-        }
-        .desktop-icon .cd-hole {
-            width: 12px;
-            height: 12px;
-        }
-
-        .window {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            max-height: none;
-            z-index: 5000;
-            box-shadow: none;
-            border: none;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        .window-content {
-            height: calc(100% - 32px); /* Account for title bar */
-            border: none;
-            margin: 0;
-        }
-        .window-title-bar {
-            border-bottom: 2px solid var(--win-border-dark);
-        }
-
-        #start-menu {
-            width: 100vw;
-            box-sizing: border-box;
-            left: 0;
-            border-left: none;
-            border-right: none;
-        }
-        
-        #media-player {
-            width: auto;
-            left: 4px;
-            right: 4px;
-            bottom: 44px; /* Above taskbar */
-        }
-      }
     </style>
 </head>
 <body>
@@ -538,6 +496,35 @@
         </div>
     </template>
     
+    <template id="display-properties-template">
+        <div class="window border-outset" style="width: 380px; height: auto; max-height: none;">
+            <div class="window-title-bar">
+                <span class="window-title-text">Display Properties</span>
+                <div class="window-controls">
+                     <button class="window-close-btn border-outset" title="Close">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="window-content border-inset display-properties-content">
+                <div class="wallpaper-preview-container border-inset">
+                    <div class="wallpaper-preview"></div>
+                </div>
+                <div class="wallpaper-controls">
+                    <p>Select a new wallpaper image from your computer.</p>
+                    <input type="file" class="wallpaper-input" accept="image/*" style="display: none;">
+                    <button class="browse-btn border-outset">Browse...</button>
+                    <button class="default-btn border-outset">Default</button>
+                </div>
+            </div>
+            <div class="window-actions">
+                <button class="ok-btn border-outset">OK</button>
+                <button class="cancel-btn border-outset">Cancel</button>
+                <button class="apply-btn border-outset">Apply</button>
+            </div>
+        </div>
+    </template>
+
     <template id="media-player-template">
         <div id="media-player" class="border-outset">
             <div id="player-title">Now Playing...</div>
@@ -559,6 +546,10 @@
 
     <template id="start-menu-template">
       <div id="start-menu" class="border-outset">
+        <a href="#" onclick="openDisplayProperties(event); return false;">
+            <img src="https://win98icons.alexmeub.com/icons/png/display_properties-1.png" alt="Display" />
+            <span>Display</span>
+        </a>
         <a href="#" onclick="openNotepad(event); return false;">
             <img src="https://win98icons.alexmeub.com/icons/png/notepad-0.png" alt="Notepad" />
             <span>Notes</span>
@@ -754,6 +745,7 @@
             const mediaPlayerTemplate = document.getElementById('media-player-template');
             const startMenuTemplate = document.getElementById('start-menu-template');
             const notepadTemplate = document.getElementById('notepad-template');
+            const displayPropertiesTemplate = document.getElementById('display-properties-template');
 
             let highestZ = 10;
             let draggedElement = null;
@@ -764,7 +756,11 @@
             let audio = null;
             let startMenu = null;
             
-            const isMobile = () => window.innerWidth <= 768;
+            // --- Load persisted wallpaper ---
+            const savedWallpaper = localStorage.getItem('desktopWallpaper');
+            if (savedWallpaper) {
+                desktop.style.backgroundImage = `url(${savedWallpaper})`;
+            }
 
             // --- Clock ---
             function updateClock() {
@@ -776,7 +772,7 @@
 
             // --- Generic Dragging Logic ---
             function startDrag(e, element) {
-                if (isMobile() || e.button !== 0) return;
+                if (e.button !== 0) return;
                 draggedElement = element;
                 draggedElement.style.zIndex = ++highestZ;
 
@@ -821,33 +817,21 @@
             albums.forEach((album, index) => {
                 const iconElement = iconTemplate.content.cloneNode(true).firstElementChild;
                 iconElement.querySelector('.icon-label').textContent = album.albumTitle;
-                
-                if (!isMobile()) {
-                    const gridX = index % 10;
-                    const gridY = Math.floor(index / 10);
-                    iconElement.style.left = `${gridX * 90 + 20}px`;
-                    iconElement.style.top = `${gridY * 110 + 20}px`;
-                }
-
-                // Desktop: drag with mousedown, open with dblclick
+                const gridX = index % 10;
+                const gridY = Math.floor(index / 10);
+                iconElement.style.left = `${gridX * 110 + 20}px`;
+                iconElement.style.top = `${gridY * 130 + 20}px`;
                 iconElement.addEventListener('mousedown', (e) => {
-                    if (isMobile() || e.button !== 0) return;
+                    if (e.button !== 0) return;
                     deselectAllIcons();
                     iconElement.classList.add('selected');
                     startDrag(e, iconElement);
                     e.stopPropagation(); 
                 });
                 iconElement.addEventListener('dblclick', (e) => {
-                    if (isMobile() || e.button !== 0) return;
+                    if (e.button !== 0) return;
                     openWindow(album);
                 });
-
-                // Mobile: open with a single click/tap
-                iconElement.addEventListener('click', () => {
-                    if (!isMobile()) return;
-                    openWindow(album);
-                });
-
                 desktop.appendChild(iconElement);
             });
 
@@ -893,12 +877,9 @@
                     trackListEl.appendChild(li);
                 });
 
-                if (!isMobile()) {
-                    const openWindows = document.querySelectorAll('.window').length;
-                    windowEl.style.left = `${50 + openWindows * 30}px`;
-                    windowEl.style.top = `${50 + openWindows * 30}px`;
-                }
-                
+                const openWindows = document.querySelectorAll('.window').length;
+                windowEl.style.left = `${50 + openWindows * 30}px`;
+                windowEl.style.top = `${50 + openWindows * 30}px`;
                 windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
                 const titleBar = windowEl.querySelector('.window-title-bar');
                 titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
@@ -921,12 +902,10 @@
                 } else {
                     windowEl = notepadTemplate.content.cloneNode(true).firstElementChild;
                     windowEl.id = windowId;
-                    
-                    if (!isMobile()) {
-                        const openWindows = document.querySelectorAll('.window').length;
-                        windowEl.style.left = `${70 + openWindows * 30}px`;
-                        windowEl.style.top = `${70 + openWindows * 30}px`;
-                    }
+
+                    const openWindows = document.querySelectorAll('.window').length;
+                    windowEl.style.left = `${70 + openWindows * 30}px`;
+                    windowEl.style.top = `${70 + openWindows * 30}px`;
                     
                     windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
                     const titleBar = windowEl.querySelector('.window-title-bar');
@@ -946,6 +925,87 @@
                     startMenu = null;
                 }
             }
+            
+             // --- Display Properties App ---
+            window.openDisplayProperties = function(event) {
+                event.preventDefault();
+                const windowId = 'display-properties-window';
+                if (document.getElementById(windowId)) {
+                    setActiveWindow(document.getElementById(windowId));
+                    return;
+                }
+
+                const windowEl = displayPropertiesTemplate.content.cloneNode(true).firstElementChild;
+                windowEl.id = windowId;
+                
+                let newWallpaperDataUrl = null;
+                const previewEl = windowEl.querySelector('.wallpaper-preview');
+                const currentBg = localStorage.getItem('desktopWallpaper');
+                if (currentBg) {
+                     previewEl.style.backgroundImage = `url(${currentBg})`;
+                }
+
+                const applyChanges = () => {
+                    if (newWallpaperDataUrl === 'default') {
+                        desktop.style.backgroundImage = 'none';
+                        localStorage.removeItem('desktopWallpaper');
+                    } else if (newWallpaperDataUrl) {
+                        desktop.style.backgroundImage = `url(${newWallpaperDataUrl})`;
+                        localStorage.setItem('desktopWallpaper', newWallpaperDataUrl);
+                    }
+                };
+
+                const closeWindow = () => {
+                    if (activeWindow === windowEl) activeWindow = null;
+                    windowEl.remove();
+                };
+
+                const fileInput = windowEl.querySelector('.wallpaper-input');
+                windowEl.querySelector('.browse-btn').addEventListener('click', () => fileInput.click());
+                windowEl.querySelector('.default-btn').addEventListener('click', () => {
+                    newWallpaperDataUrl = 'default';
+                    previewEl.style.backgroundImage = 'none';
+                });
+                
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file && file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = (readEvent) => {
+                            newWallpaperDataUrl = readEvent.target.result;
+                            previewEl.style.backgroundImage = `url(${newWallpaperDataUrl})`;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+                windowEl.querySelector('.apply-btn').addEventListener('click', applyChanges);
+                windowEl.querySelector('.ok-btn').addEventListener('click', () => {
+                    applyChanges();
+                    closeWindow();
+                });
+                windowEl.querySelector('.cancel-btn').addEventListener('click', closeWindow);
+
+
+                const openWindows = document.querySelectorAll('.window').length;
+                windowEl.style.left = `${80 + openWindows * 30}px`;
+                windowEl.style.top = `${80 + openWindows * 30}px`;
+                
+                windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                const titleBar = windowEl.querySelector('.window-title-bar');
+                titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                
+                windowEl.querySelector('.window-close-btn').addEventListener('click', closeWindow);
+
+                desktop.appendChild(windowEl);
+                setActiveWindow(windowEl);
+                
+                if (startMenu) {
+                    startMenu.remove();
+                    startMenu = null;
+                }
+            }
+
 
             // --- Media Player ---
             function createMediaPlayer() {
@@ -1022,8 +1082,6 @@
             });
 
             desktop.addEventListener('mousedown', (e) => {
-                // For mobile, e.target will be the desktop container itself in the list view
-                // For desktop, it's the empty space.
                 if (e.target === desktop) {
                     deselectAllIcons();
                     if(startMenu) {
