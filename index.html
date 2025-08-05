@@ -82,6 +82,9 @@
         width: 80px;
         height: 80px;
         margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       .desktop-icon .jewel-case {
         position: relative;
@@ -363,6 +366,65 @@
             margin-left: 6px;
             font-size: 12px;
         }
+
+      /* MySpace Styles */
+      .myspace-window .window-title-text {
+        font-family: 'Tahoma', sans-serif;
+        font-size: 11px;
+        font-weight: normal;
+      }
+      .myspace-body {
+        cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADISURBVDhPzZJRDsAgCEQ9+f9/tA8WpQYswQkI3TT7k5RCy8R2YLLgihS8A3QyowGwcYcjYhA4nQdAB+hE3n0yG4oB3B/0kU9Ad8SroDsyV8AcuYvoDsxVAHdyLqA7MZMAN6EHYA7MWQAXwB2Y4QAcwS2YxwB4AhsxSwLgCkzFLAhAKjCVPwtAKDCV+gqAoMBV6iuAoMD19isAoMD1/isAoMD3A6gCgMIH4FcAQOEz8isAgvIT8iuAgvIXsfejLOoDNpHZURn2v/sAAAAASUVORK5CYII='), auto;
+        background-color: #000;
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAADFJREFUGJWtkEEKACEIA/8/8724sYQKEhEbBnoGY2I6K0EonPInEafE4/A8aP83wt9733sC7wAp6A22F2JvJAAAAABJRU5ErkJggg==');
+        color: white;
+        font-family: 'Verdana', sans-serif;
+        padding: 10px;
+        display: flex;
+        gap: 10px;
+      }
+      .myspace-left-col { flex: 2; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+      .myspace-right-col { flex: 1; display: flex; flex-direction: column; gap: 10px; min-width: 0;}
+
+      .myspace-module {
+        border: 1px solid hotpink;
+        background: rgba(10, 10, 10, 0.8);
+      }
+      .myspace-module-header {
+        background-color: hotpink;
+        color: black;
+        font-weight: bold;
+        padding: 3px 8px;
+        font-size: 12px;
+      }
+      .myspace-module-content { padding: 10px; font-size: 13px; line-height: 1.4; }
+      
+      .myspace-profile-header { text-align: center; }
+      .myspace-profile-header img {
+        width: 150px;
+        height: 150px;
+        border: 2px solid hotpink;
+        padding: 2px;
+        margin-bottom: 8px;
+      }
+      .myspace-profile-header h2 { margin: 0; font-size: 20px; color: hotpink; }
+      .myspace-profile-details { list-style: none; padding: 0; margin: 0; color: #ccc; }
+      .myspace-profile-details li { padding: 1px 0; }
+      #myspace-song { font-weight: bold; color: white; }
+
+      .myspace-about-me { color: white; }
+      .myspace-about-me b { color: hotpink; }
+
+      .myspace-top8 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .myspace-friend { text-align: center; font-size: 11px; }
+      .myspace-friend img { width: 50px; height: 50px; border: 1px solid #555; display: block; margin: 0 auto 4px; }
+
+      .myspace-comments-list p { margin: 0 0 10px; border-bottom: 1px dotted #444; padding-bottom: 8px; }
+      .myspace-comments-list b { color: #6194E4; cursor: pointer; }
 
 
       /* Taskbar */
@@ -770,6 +832,65 @@
             </div>
         </div>
     </template>
+    
+    <template id="myspace-template">
+        <div class="window border-outset myspace-window" style="width: 650px; height: 500px; max-height: 600px;">
+             <div class="window-title-bar">
+                <span class="window-title-text">MySpace - http://www.myspace.com/CarmenXCannibal</span>
+                <div class="window-controls">
+                    <button class="border-outset" title="Minimize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                    <button class="border-outset" title="Maximize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg></button>
+                    <button class="window-close-btn border-outset" title="Close"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                </div>
+            </div>
+            <div class="window-content border-inset myspace-body">
+                <div class="myspace-left-col">
+                    <div class="myspace-profile-header">
+                        <h2>Carmen</h2>
+                        <img src="https://github.com/n0c7u2n3/songs-about-you/blob/main/IMG_0444.JPG?raw=true" alt="Carmen's profile picture">
+                        <ul class="myspace-profile-details">
+                            <center><span id="myspace-song"><li><b>Mood:</b> <span id="myspace-song"> apathetic :/</li>
+                            <li><b>Status:</b> <span id="myspace-song"> "its a dAmN cOld NiGhT tryna figure out whats right"</li>
+                            <li><b>Song:</b> <span id="myspace-song">" So Yesterday" – Hillary Duff</span></li>
+                        </ul></center>
+                    </div>
+                     <div class="myspace-module">
+                        <div class="myspace-module-header">Carmen's Blurbs</div>
+                        <div class="myspace-module-content myspace-about-me">
+                            <b>About me:</b><br>
+                            ABOUT ME HERE<br><br>  
+                            <i>~ i wish you knew the real me ~</i>
+                        </div>
+                    </div>
+                </div>
+                <div class="myspace-right-col">
+                     <div class="myspace-module">
+                        <div class="myspace-module-header">Carmen's Top 8</div>
+                        <div class="myspace-module-content myspace-top8">
+                            <div class="myspace-friend"><img src="https://win98icons.alexmeub.com/icons/png/user_woman_black-4.png" alt="Maya"><br>Maya 💅</div>
+                            <div class="myspace-friend"><img src="https://win98icons.alexmeub.com/icons/png/user-4.png" alt="Liam"><br>Liam 🖤</div>
+                            <div class="myspace-friend"><img src="https://win98icons.alexmeub.com/icons/png/user_cool-1.png" alt="CD_Master"><br>CD_Master 🔥</div>
+                            <div class="myspace-friend"><img src="https://win98icons.alexmeub.com/icons/png/user_headphones-4.png" alt="AltGirl_J9"><br>AltGirl_J9 ☠️</div>
+                            <div class="myspace-friend"><img src="https://win98icons.alexmeub.com/icons/png/user_world-2.png" alt="Sk8rBoi_82"><br>Sk8rBoi_82 🛹</div>
+                            <div class="myspace-friend"><img src="https://win98icons.alexmeub.com/icons/png/user_woman_business-4.png" alt="SpiceFan_97"><br>SpiceFan_97 💖</div>
+                            <div class="myspace-friend"><img src="https://win98icons.alexmeub.com/icons/png/user_sunglasses-4.png" alt="VinylVampire"><br>VinylVampire 📼</div>
+                            <div class="myspace-friend"><img src="https://win98icons.alexmeub.com/icons/png/user_tux-4.png" alt="GrungeCore88"><br>GrungeCore88 🤘</div>
+                        </div>
+                    </div>
+                     <div class="myspace-module">
+                        <div class="myspace-module-header">Carmen's Comments</div>
+                        <div class="myspace-module-content myspace-comments-list">
+                            <p><b>Sk8rBoi_82:</b> yo that playlist you posted is fire 🔥🔥🔥</p>
+                            <p><b>AltGirl_J9:</b> we still on for tower records friday?</p>
+                            <p><b>Maya:</b> call me i have THE tea ☕</p>
+                            <p><b>Liam:</b> u still mad?</p>
+                            <p><b>SpiceFan_97:</b> new mirror pic slaps 💅</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
 
     <template id="media-player-template">
         <div id="media-player" class="border-outset">
@@ -810,13 +931,13 @@
             <img src="https://win98icons.alexmeub.com/icons/png/users-1.png" alt="Chatrooms" />
             <span>Chatrooms</span>
         </a>
-        <a href="#" onclick="event.preventDefault(); return false;">
-            <img src="https://win98icons.alexmeub.com/icons/png/help_book_big-1.png" alt="Guestbook" />
-            <span>Guestbook</span>
+        <a href="#" onclick="openMySpace(event); return false;">
+            <img src="https://win98icons.alexmeub.com/icons/png/msie1-2.png" alt="internet" />
+            <span>Internet</span>
         </a>
         <div class="start-menu-separator"></div>
         <a href="https://saypodcast.com" target="_blank">
-            <img src="https://win98icons.alexmeub.com/icons/png/microphone_2-1.png" alt="Internet" />
+            <img src="https://win98icons.alexmeub.com/icons/png/microphone_2-1.png" alt="Podcast" />
             <span>saypodcast.com</span>
         </a>
         <div class="start-menu-separator"></div>
@@ -999,6 +1120,7 @@
             const notepadTemplate = document.getElementById('notepad-template');
             const displayPropertiesTemplate = document.getElementById('display-properties-template');
             const chatroomTemplate = document.getElementById('chatroom-template');
+            const myspaceTemplate = document.getElementById('myspace-template');
 
             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
@@ -1094,13 +1216,17 @@
                 });
             }
 
-            albums.forEach((album, index) => {
-                const iconElement = iconTemplate.content.cloneNode(true).firstElementChild;
-                iconElement.querySelector('.icon-label').textContent = album.albumTitle;
-                const gridX = index % 10;
-                const gridY = Math.floor(index / 10);
-                iconElement.style.left = `${gridX * 110 + 20}px`;
-                iconElement.style.top = `${gridY * 130 + 20}px`;
+            function createDesktopIcon(config) {
+                 const iconElement = iconTemplate.content.cloneNode(true).firstElementChild;
+                iconElement.querySelector('.icon-label').textContent = config.label;
+                
+                const iconImageContainer = iconElement.querySelector('.icon-image');
+                if (config.imgSrc) {
+                     iconImageContainer.innerHTML = `<img src="${config.imgSrc}" style="width: 80px; height: 80px; image-rendering: pixelated;">`;
+                }
+               
+                iconElement.style.left = config.x;
+                iconElement.style.top = config.y;
                 
                 iconElement.addEventListener('mousedown', (e) => {
                     if (e.button !== 0) return;
@@ -1111,22 +1237,35 @@
                 });
                 
                 if (isTouchDevice) {
-                    // On touch devices, a single tap opens the window.
-                    // The isDragging check prevents opening if the user's finger slips during the tap.
                     iconElement.addEventListener('click', () => {
-                        if (iconElement.dataset.isDragging === 'true') {
-                            return;
-                        }
-                        openWindow(album);
+                        if (iconElement.dataset.isDragging === 'true') return;
+                        config.action();
                     });
                 } else {
-                    // On desktop, a double-click opens the window.
-                    // A single click is handled by the 'mousedown' event for selection.
-                    iconElement.addEventListener('dblclick', () => {
-                        openWindow(album);
-                    });
+                    iconElement.addEventListener('dblclick', config.action);
                 }
                 desktop.appendChild(iconElement);
+                return iconElement;
+            }
+
+            albums.forEach((album, index) => {
+                const gridX = index % 10;
+                const gridY = Math.floor(index / 10);
+                createDesktopIcon({
+                    label: album.albumTitle,
+                    x: `${gridX * 110 + 20}px`,
+                    y: `${gridY * 130 + 20}px`,
+                    action: () => openWindow(album)
+                });
+            });
+            
+            // Add MySpace Icon
+             createDesktopIcon({
+                label: 'Internet Explorer',
+                imgSrc: 'https://win98icons.alexmeub.com/icons/png/msie1-2.png',
+                x: '20px',
+                y: '280px',
+                action: () => openMySpace()
             });
 
 
@@ -1396,6 +1535,52 @@
 
                 desktop.appendChild(windowEl);
                 setActiveWindow(windowEl);
+                
+                if (startMenu) {
+                    startMenu.remove();
+                    startMenu = null;
+                }
+            }
+            
+            // --- MySpace App ---
+            window.openMySpace = function(event) {
+                event?.preventDefault();
+                const windowId = 'myspace-window';
+                let windowEl = document.getElementById(windowId);
+                const mySpaceSongUrl = 'https://audio.jukehost.co.uk/4B6oljgbQxLsFWpmeKPkDbsIUysp6vpz';
+
+                if (windowEl) {
+                    setActiveWindow(windowEl);
+                } else {
+                    windowEl = myspaceTemplate.content.cloneNode(true).firstElementChild;
+                    windowEl.id = windowId;
+
+                    const openWindows = document.querySelectorAll('.window').length;
+                    windowEl.style.left = `${100 + openWindows * 30}px`;
+                    windowEl.style.top = `${100 + openWindows * 30}px`;
+                    
+                    windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                    const titleBar = windowEl.querySelector('.window-title-bar');
+                    titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                    
+                    const closeBtn = windowEl.querySelector('.window-close-btn');
+                    closeBtn.addEventListener('click', () => {
+                        if (activeWindow === windowEl) activeWindow = null;
+                        windowEl.remove();
+                        // Stop the MySpace song if it's currently playing
+                        if (audio && audio.src === mySpaceSongUrl) {
+                            audio.pause();
+                            audio.src = '';
+                            if (mediaPlayer) {
+                                mediaPlayer.classList.remove('visible');
+                            }
+                        }
+                    });
+
+                    desktop.appendChild(windowEl);
+                    setActiveWindow(windowEl);
+                    playTrack("So Yesterday – Hillary Duff", mySpaceSongUrl);
+                }
                 
                 if (startMenu) {
                     startMenu.remove();
