@@ -1375,7 +1375,7 @@
                     const userListEl = windowEl.querySelector('.chatroom-user-list');
 
                     const chatLog = [
-{ user: 'Sk8rBoi_82', color: '#00FFFF', message: 'anyone been listening to that “Songs About You” stream lately?' },
+ { user: 'Sk8rBoi_82', color: '#00FFFF', message: 'anyone been listening to that “Songs About You” stream lately?' },
 { user: 'SpiceFan_97', color: '#FF00FF', message: 'yeah. caught some of it last night. people still sending in burned mixes, right?' },
 { user: 'CD_Master', color: '#FFFF00', message: 'yeah. the one from “K” stuck with me. started with Feist, ended with “Lua.”' },
 { user: 'AltGirl_J9', color: '#A52A2A', message: 'felt personal. not overthought' },
@@ -1393,6 +1393,7 @@
 { user: 'SpiceFan_97', color: '#FF00FF', message: 'i might send one in. not sure it’s good. doesn’t matter, i guess' },
 { user: 'Sk8rBoi_82', color: '#00FFFF', message: 'you should. those mixes are kind of like time capsules anyway' },
 { user: 'System', color: '#FF6347', message: '*** chat will auto-log out in 5 minutes due to inactivity ***' }
+
                     ];
 
                     const users = [...new Set(chatLog.map(entry => entry.user).filter(user => user !== 'System'))];
