@@ -81,7 +81,7 @@
         position: relative;
         width: 60px;
         height: 60px;
-        margin-bottom: 4px;
+        margin-bottom: 1px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -92,7 +92,7 @@
         height: 100%;
         background-color: rgba(0, 0, 0, 0.2);
         backdrop-filter: blur(2px);
-        padding: 4px;
+        padding:1px;
         border: 1px solid #777;
         display: flex;
       }
@@ -2325,18 +2325,7 @@ attached a draft of the questions. feel free to move things around. i think we s
                 return iconElement;
             }
 
-            albums.forEach((album, index) => {
-                const gridX = index % 12;
-                const gridY = Math.floor(index / 12);
-                createDesktopIcon({
-                    label: album.albumTitle,
-                    x: `${gridX * 90 + 20}px`,
-                    y: `${gridY * 110 + 20}px`,
-                    action: () => openWindow(album)
-                });
-            });
-            
-            // Add App Icons
+            // Define App Icons first
             const appIconConfigs = [
                  { label: 'Internet Explorer', imgSrc: 'https://win98icons.alexmeub.com/icons/png/msie1-2.png', action: () => openMySpace() },
                  { label: 'Chat', imgSrc: 'https://github.com/n0c7u2n3/songs-about-you/blob/main/Logo_ICQ.svg.png?raw=true', action: () => openChatroom() },
@@ -2349,20 +2338,42 @@ attached a draft of the questions. feel free to move things around. i think we s
                  { label: 'Sound Recorder', imgSrc: 'https://win98icons.alexmeub.com/icons/png/microphone_2-0.png', action: () => openSoundRecorder() },
                  { label: 'Mail', imgSrc: 'https://win98icons.alexmeub.com/icons/png/envelope_closed-0.png', action: () => openInbox() }
             ];
-            
-            appIconConfigs.forEach((app, index) => {
-                const startY = 240;
-                const iconHeight = 110;
-                const iconWidth = 90;
-                const iconsPerRow = 12;
 
-                const gridX = index % iconsPerRow;
-                const gridY = Math.floor(index / iconsPerRow);
+            // Combine all items for the desktop grid
+            const desktopItems = [
+                ...albums.map(album => ({
+                    label: album.albumTitle,
+                    action: () => openWindow(album),
+                    // No imgSrc, so it uses the jewel case template
+                })),
+                ...appIconConfigs
+            ];
+
+            // --- Position icons in a grid on the desktop ---
+            const iconWidth = 90;
+            const iconHeight = 110;
+            const startX = 20;
+            const startY = 20;
+            
+            // Calculate how many icons can fit in one column
+            // Use clientHeight for visible area, fallback for initial render
+            let iconsPerColumn = Math.floor((desktop.clientHeight - startY * 2) / iconHeight);
+            if (iconsPerColumn < 1) {
+                iconsPerColumn = 5; // A sensible fallback
+            }
+
+            desktopItems.forEach((item, index) => {
+                // Arrange icons down columns, then across rows
+                const col = Math.floor(index / iconsPerColumn);
+                const row = index % iconsPerColumn;
                 
+                const x = startX + col * iconWidth;
+                const y = startY + row * iconHeight;
+
                 createDesktopIcon({
-                    ...app,
-                    x: `${gridX * iconWidth + 20}px`,
-                    y: `${startY + (gridY * iconHeight)}px`
+                    ...item,
+                    x: `${x}px`,
+                    y: `${y}px`,
                 });
             });
 
@@ -3209,14 +3220,14 @@ attached a draft of the questions. feel free to move things around. i think we s
 
                     playbackAudio.addEventListener('pause', () => {
                         stopVisualization();
-                        if (analyser && audioContext) analyser.disconnect(audioContext.destination); 
+                        if (analyser && audioContext.destination) analyser.disconnect(audioContext.destination); 
                         updateButtonStates();
                     });
                     
                     playbackAudio.addEventListener('ended', () => {
                          playbackAudio.currentTime = 0;
                          stopVisualization();
-                         if (analyser && audioContext) analyser.disconnect(audioContext.destination);
+                         if (analyser && audioContext.destination) analyser.disconnect(audioContext.destination);
                          updateButtonStates();
                     });
                     
