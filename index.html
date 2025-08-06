@@ -73,15 +73,15 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 100px;
+        width: 70px;
         cursor: pointer;
         padding: 4px;
       }
       .desktop-icon .icon-image {
         position: relative;
-        width: 80px;
-        height: 80px;
-        margin-bottom: 8px;
+        width: 60px;
+        height: 60px;
+        margin-bottom: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -97,7 +97,7 @@
         display: flex;
       }
       .desktop-icon .spine {
-        width: 8px;
+        width: 6px;
         height: 100%;
         background-color: rgba(50, 50, 50, 0.7);
       }
@@ -108,8 +108,8 @@
         justify-content: center;
       }
       .desktop-icon .cd {
-        width: 65px;
-        height: 65px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
         background: linear-gradient(45deg, #a7b5d1, #7c89a7, #d4dcf0);
         display: flex;
@@ -118,8 +118,8 @@
         box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
       }
       .desktop-icon .cd-hole {
-        width: 20px;
-        height: 20px;
+        width: 15px;
+        height: 15px;
         background: var(--win-bg);
         border-radius: 50%;
         border: 2px solid #aaa;
@@ -127,7 +127,7 @@
       .desktop-icon .icon-label {
         color: white;
         text-align: center;
-        font-size: 14px;
+        font-size: 12px;
         padding: 2px 4px;
         word-wrap: break-word;
       }
@@ -863,6 +863,107 @@
       }
       .sound-recorder-controls .record-btn svg {
           fill: red;
+      }
+      
+      /* Inbox.exe Styles */
+      .inbox-window .window-content {
+          padding: 0;
+          display: flex;
+          overflow: hidden;
+          font-family: 'Tahoma', 'Verdana', sans-serif;
+          font-size: 12px;
+          background: var(--win-bg);
+          color: black;
+      }
+      .inbox-sidebar {
+          width: 150px;
+          flex-shrink: 0;
+          background: var(--win-bg);
+          padding: 4px;
+          border-right: 2px solid;
+          border-color: var(--win-border-light) var(--win-border-dark) var(--win-border-dark) var(--win-border-light);
+      }
+      .inbox-folder-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+      }
+      .inbox-folder-list li {
+          padding: 6px 8px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+      }
+      .inbox-folder-list li:hover {
+          background-color: #e0e0e0;
+      }
+      .inbox-folder-list li.selected {
+          background-color: var(--title-bar-active);
+          color: white;
+      }
+       .inbox-folder-list img {
+          width: 16px;
+          height: 16px;
+      }
+      .inbox-main-content {
+          flex-grow: 1;
+          display: flex;
+          min-width: 0;
+      }
+      .inbox-email-list {
+          width: 40%;
+          min-width: 200px;
+          flex-shrink: 0;
+          background: white;
+          overflow-y: auto;
+          border-right: 1px solid var(--win-border-dark);
+      }
+      .email-item {
+          padding: 8px;
+          border-bottom: 1px solid #ccc;
+          cursor: pointer;
+      }
+      .email-item:hover {
+          background: #eef;
+      }
+      .email-item.selected {
+          background: #d0d8f0;
+          border-left: 3px solid var(--title-bar-active);
+      }
+      .email-item-from { font-weight: bold; }
+      .email-item-subject { }
+      .email-item-preview { 
+          font-size: 11px;
+          color: #555;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin-top: 4px;
+      }
+      .inbox-message-viewer {
+          flex-grow: 1;
+          background: white;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+      }
+      .message-header {
+          padding: 10px;
+          border-bottom: 1px solid #ccc;
+          background: #f7f7f7;
+      }
+      .message-header div { margin-bottom: 4px; }
+      .message-header span { font-weight: bold; }
+      .message-body {
+          flex-grow: 1;
+          padding: 12px;
+          font-family: 'Courier New', monospace;
+          white-space: pre-wrap;
+          overflow-y: auto;
+          line-height: 1.5;
+          background: #fff;
       }
 
       /* Taskbar */
@@ -1680,6 +1781,39 @@ My heart is
         </div>
     </template>
 
+    <template id="inbox-template">
+        <div class="window border-outset inbox-window" style="width: 750px; height: 500px; max-height: 80vh;">
+            <div class="window-title-bar">
+                <span class="window-title-text">Inbox</span>
+                <div class="window-controls">
+                    <button class="border-outset" title="Minimize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 9H11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                    <button class="border-outset" title="Maximize" disabled><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1H11V11H1V1Z" stroke="black" strokeWidth="2"/></svg></button>
+                    <button class="window-close-btn border-outset" title="Close"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="2" strokeLinecap="square"/></svg></button>
+                </div>
+            </div>
+            <div class="window-content">
+                <div class="inbox-sidebar border-inset">
+                    <ul class="inbox-folder-list">
+                        <!-- Folders will be injected here -->
+                    </ul>
+                </div>
+                <div class="inbox-main-content">
+                    <div class="inbox-email-list border-inset">
+                        <!-- Email list will be injected here -->
+                    </div>
+                    <div class="inbox-message-viewer">
+                         <div class="message-header">
+                            <!-- Header will be injected here -->
+                         </div>
+                         <div class="message-body">
+                            <!-- Body will be injected here -->
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
 
     <template id="media-player-template">
         <div id="media-player" class="border-outset">
@@ -1968,6 +2102,58 @@ My heart is
               }
             };
 
+            const emailData = {
+                'Inbox': [
+                    {
+                        from: 'julian@saypodcast.com',
+                        subject: 'interview questions draft',
+                        preview: 'yo here’s that first draft of Qs...',
+                        body: `hii <br>
+attached a draft of the questions. feel free to move things around. i think we should open with something softer so they don’t freeze up, but it's up to you<br><br>also don’t forget, the studio space we usually use downtown is blocked off bc they’re filming some scenes for Veronica Mars or something, so the whole alley’s shut down. we're at the other spot near the old Tower Records instead. same time, 3pm.`
+                    },
+                    {
+                        from: 'jimmy@hogmail.com',
+                        subject: 'yo i found the this on limewire lol',
+                        preview: 'heyy looking for the new death c...',
+                        body: `heyy<br>looking for the new death cab album and downloaded the first cut of ur internet radio show<br>good shiit!<br>cool if i put it on some flash drives and pass them out at coachella this year? lol`
+                    },
+                    {
+                        from: 'MDara@sjsu.edu',
+                        subject: 'can i borrow ur cd player??',
+                        preview: 'yo can i borrow your cd player?...',
+                        body: `yo can i borrow your cd player?\nmine broke and i got that burned mix i still haven’t heard.\ni promise i’ll bring it back by friday, unless we’re hanging before then.`
+                    },
+                    {
+                        from: 'kyle@hotmess.net',
+                        subject: 'party @ tasha’s',
+                        preview: 'friday night starts at 9. tash...',
+                        body: `friday night \nstarts at 9. tasha said she’s doing a full vinyl set so bring a blank tape if you want a copy.\nalso liam’s gonna be there so don’t be weird lol`
+                    },
+                    {
+                        from: 'zoe@pop-punk.org',
+                        subject: 'warped tour planzzz',
+                        preview: 'we’re hitting shoreline around 11...',
+                        body: `gates open at 11.\nwe’re meeting at the gas station across from safeway at like 9.\nalso i printed the schedule and circled all the bands we care about so we don’t miss anyone.\ntext me if u flake.`
+                    }
+                ],
+                'Sent': [],
+                'Drafts': [],
+                'Spam': [
+                    {
+                        from: 'winaplayer1999@freesounds.ru',
+                        subject: 'FREE MP3s NOW',
+                        preview: 'click here to unlock 10,000 mp3 files (virus free)',
+                        body: `you’ve been selected to try our newest p2p downloader.\nget 10,000 mp3s now — totally free. no credit card required. not a scam.`
+                    },
+                    {
+                        from: 'ringtonez4u@b0ingmail.com',
+                        subject: 'custom ringtone waiting',
+                        preview: 'your crush thinks you’re cute. download Crazy Frog now.',
+                        body: `your custom ringtone is ready!\ndownload now to get:\n\n    Crazy Frog\n\n    Hollaback Girl\n\n    The OC Theme\n\nfirst 25 downloads also get a free AIM away message pack.`
+                    }
+                ]
+            };
+
             let trackCounter = 0;
             albums.forEach(album => {
                 album.tracks.forEach(track => {
@@ -1994,6 +2180,7 @@ My heart is
             const limewireTemplate = document.getElementById('limewire-template');
             const skifreeTemplate = document.getElementById('skifree-template');
             const soundRecorderTemplate = document.getElementById('sound-recorder-template');
+            const inboxTemplate = document.getElementById('inbox-template');
 
             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
@@ -2112,7 +2299,7 @@ My heart is
                 
                 const iconImageContainer = iconElement.querySelector('.icon-image');
                 if (config.imgSrc) {
-                     iconImageContainer.innerHTML = `<img src="${config.imgSrc}" style="width: 80px; height: 80px; image-rendering: pixelated; object-fit: contain;">`;
+                     iconImageContainer.innerHTML = `<img src="${config.imgSrc}" style="width: 60px; height: 60px; image-rendering: pixelated; object-fit: contain;">`;
                 }
                
                 iconElement.style.left = config.x;
@@ -2139,91 +2326,45 @@ My heart is
             }
 
             albums.forEach((album, index) => {
-                const gridX = index % 10;
-                const gridY = Math.floor(index / 10);
+                const gridX = index % 12;
+                const gridY = Math.floor(index / 12);
                 createDesktopIcon({
                     label: album.albumTitle,
-                    x: `${gridX * 110 + 20}px`,
-                    y: `${gridY * 130 + 20}px`,
+                    x: `${gridX * 90 + 20}px`,
+                    y: `${gridY * 110 + 20}px`,
                     action: () => openWindow(album)
                 });
             });
             
             // Add App Icons
+            const appIconConfigs = [
+                 { label: 'Internet Explorer', imgSrc: 'https://win98icons.alexmeub.com/icons/png/msie1-2.png', action: () => openMySpace() },
+                 { label: 'Chat', imgSrc: 'https://github.com/n0c7u2n3/songs-about-you/blob/main/Logo_ICQ.svg.png?raw=true', action: () => openChatroom() },
+                 { label: 'selfies :)', imgSrc: 'https://win98icons.alexmeub.com/icons/png/directory_closed-0.png', action: () => openPhotosFolder() },
+                 { label: 'My Heart.txt', imgSrc: 'https://win98icons.alexmeub.com/icons/png/notepad_file-1.png', action: () => openReadMe() },
+                 { label: 'AIM', imgSrc: 'https://icons.veryicon.com/png/Internet%20%26%20Web/Socialmedia/Aim.png', action: () => openAim() },
+                 { label: 'Sims 2', imgSrc: 'https://cdn2.steamgriddb.com/icon_thumb/051928341be67dcba03f0e04104d9047.png', action: () => openSimsWindow() },
+                 { label: 'LimeWire', imgSrc: 'https://upload.wikimedia.org/wikipedia/commons/b/b1/LimeWire.png', action: () => openLimeWire() },
+                 { label: 'SkiFree', imgSrc: 'https://www.giantbomb.com/a/uploads/scale_small/8/87790/3216817-icon_ski.png', action: () => openSkiFree() },
+                 { label: 'Sound Recorder', imgSrc: 'https://win98icons.alexmeub.com/icons/png/microphone_2-0.png', action: () => openSoundRecorder() },
+                 { label: 'Inbox', imgSrc: 'https://win98icons.alexmeub.com/icons/png/envelope_closed-0.png', action: () => openInbox() }
+            ];
             
-            createDesktopIcon({
-                label: 'Internet Explorer',
-                imgSrc: 'https://win98icons.alexmeub.com/icons/png/msie1-2.png',
-                x: '20px',
-                y: '280px',
-                action: () => openMySpace()
-            });
+            appIconConfigs.forEach((app, index) => {
+                const startY = 240;
+                const iconHeight = 110;
+                const iconWidth = 90;
+                const iconsPerRow = 12;
 
-            
-            createDesktopIcon({
-                label: 'Chat',
-                imgSrc: 'https://github.com/n0c7u2n3/songs-about-you/blob/main/Logo_ICQ.svg.png?raw=true',
-                x: '20px',
-                y: '400px',
-                action: () => openChatroom()
+                const gridX = index % iconsPerRow;
+                const gridY = Math.floor(index / iconsPerRow);
+                
+                createDesktopIcon({
+                    ...app,
+                    x: `${gridX * iconWidth + 20}px`,
+                    y: `${startY + (gridY * iconHeight)}px`
+                });
             });
-            
-            createDesktopIcon({
-                label: 'selfies :)',
-                imgSrc: 'https://win98icons.alexmeub.com/icons/png/directory_closed-0.png',
-                x: '130px',
-                y: '280px',
-                action: () => openPhotosFolder()
-            });
-            
-            createDesktopIcon({
-                label: 'My Heart.txt',
-                imgSrc: 'https://win98icons.alexmeub.com/icons/png/notepad_file-1.png',
-                x: '130px',
-                y: '400px',
-                action: () => openReadMe()
-            });
-
-            createDesktopIcon({
-                label: 'AIM',
-                imgSrc: 'https://icons.veryicon.com/png/Internet%20%26%20Web/Socialmedia/Aim.png',
-                x: '240px',
-                y: '280px',
-                action: () => openAim()
-            });
-
-            createDesktopIcon({
-                label: 'Sims 2',
-                imgSrc: 'https://cdn2.steamgriddb.com/icon_thumb/051928341be67dcba03f0e04104d9047.png',
-                x: '240px',
-                y: '400px',
-                action: () => openSimsWindow()
-            });
-            
-            createDesktopIcon({
-                label: 'LimeWire',
-                imgSrc: 'https://upload.wikimedia.org/wikipedia/commons/b/b1/LimeWire.png',
-                x: '350px',
-                y: '280px',
-                action: () => openLimeWire()
-            });
-
-            createDesktopIcon({
-                label: 'SkiFree',
-                imgSrc: 'https://www.giantbomb.com/a/uploads/scale_small/8/87790/3216817-icon_ski.png',
-                x: '350px',
-                y: '400px',
-                action: () => openSkiFree()
-            });
-
-            createDesktopIcon({
-                label: 'Sound Recorder',
-                imgSrc: 'https://win98icons.alexmeub.com/icons/png/microphone_2-0.png',
-                x: '460px',
-                y: '280px',
-                action: () => openSoundRecorder()
-            });
-
 
             // --- Window Management ---
             function setActiveWindow(windowEl) {
@@ -3052,6 +3193,9 @@ My heart is
 
                     playbackAudio.addEventListener('play', () => {
                         initAudioContext();
+                        if (audioContext.state === 'suspended') {
+                            audioContext.resume();
+                        }
                         if (playbackSourceNode) {
                            playbackSourceNode.disconnect();
                         }
@@ -3065,12 +3209,14 @@ My heart is
 
                     playbackAudio.addEventListener('pause', () => {
                         stopVisualization();
+                        if (analyser && audioContext) analyser.disconnect(audioContext.destination); 
                         updateButtonStates();
                     });
                     
                     playbackAudio.addEventListener('ended', () => {
                          playbackAudio.currentTime = 0;
                          stopVisualization();
+                         if (analyser && audioContext) analyser.disconnect(audioContext.destination);
                          updateButtonStates();
                     });
                     
@@ -3138,6 +3284,115 @@ My heart is
                 }
             }
 
+            // --- Inbox.exe App ---
+            window.openInbox = function() {
+                const windowId = 'inbox-window';
+                if (document.getElementById(windowId)) {
+                    setActiveWindow(document.getElementById(windowId));
+                    return;
+                }
+
+                const windowEl = inboxTemplate.content.cloneNode(true).firstElementChild;
+                windowEl.id = windowId;
+
+                const folderListEl = windowEl.querySelector('.inbox-folder-list');
+                const emailListEl = windowEl.querySelector('.inbox-email-list');
+                const messageHeaderEl = windowEl.querySelector('.message-header');
+                const messageBodyEl = windowEl.querySelector('.message-body');
+
+                let currentFolder = null;
+                let currentEmail = null;
+
+                const displayMessage = (email) => {
+                    messageHeaderEl.innerHTML = `
+                        <div><span>From:</span> ${email.from}</div>
+                        <div><span>Subject:</span> ${email.subject}</div>
+                    `;
+                    messageBodyEl.innerHTML = email.body;
+                    
+                    // Update selection in email list
+                    if (currentEmail) {
+                        currentEmail.classList.remove('selected');
+                    }
+                    const newSelectedEl = emailListEl.querySelector(`[data-email-subject="${email.subject}"]`);
+                    if(newSelectedEl) {
+                       newSelectedEl.classList.add('selected');
+                       currentEmail = newSelectedEl;
+                    }
+                };
+
+                const displayEmailList = (folderName) => {
+                    emailListEl.innerHTML = '';
+                    messageHeaderEl.innerHTML = '';
+                    messageBodyEl.textContent = '';
+                    
+                    const emails = emailData[folderName];
+
+                    if (emails.length === 0) {
+                        emailListEl.innerHTML = '<div style="padding: 10px; color: #888;">This folder is empty.</div>';
+                        return;
+                    }
+
+                    emails.forEach(email => {
+                        const item = document.createElement('div');
+                        item.className = 'email-item';
+                        item.dataset.emailSubject = email.subject;
+                        item.innerHTML = `
+                            <div class="email-item-from">${email.from}</div>
+                            <div class="email-item-subject">${email.subject}</div>
+                            <div class="email-item-preview">${email.preview}</div>
+                        `;
+                        item.addEventListener('click', () => displayMessage(email));
+                        emailListEl.appendChild(item);
+                    });
+
+                    // Display the first email by default
+                    displayMessage(emails[0]);
+                };
+
+                const selectFolder = (folderName) => {
+                    if (currentFolder) {
+                        currentFolder.classList.remove('selected');
+                    }
+                    const newSelectedFolder = folderListEl.querySelector(`[data-folder-name="${folderName}"]`);
+                    if (newSelectedFolder) {
+                        newSelectedFolder.classList.add('selected');
+                        currentFolder = newSelectedFolder;
+                    }
+                    displayEmailList(folderName);
+                };
+
+                Object.keys(emailData).forEach(folderName => {
+                    const item = document.createElement('li');
+                    item.dataset.folderName = folderName;
+                    
+                    let iconSrc = 'https://win98icons.alexmeub.com/icons/png/directory_closed-4.png';
+                    if (folderName === 'Inbox') iconSrc = 'https://win98icons.alexmeub.com/icons/png/envelope_open_sheet-0.png';
+                    if (folderName === 'Spam') iconSrc = 'https://win98icons.alexmeub.com/icons/png/recycle_bin_full-0.png';
+                    if (folderName === 'Sent') iconSrc = 'https://win98icons.alexmeub.com/icons/png/outlook_express-0.png';
+
+                    item.innerHTML = `<img src="${iconSrc}" alt=""> ${folderName}`;
+                    item.addEventListener('click', () => selectFolder(folderName));
+                    folderListEl.appendChild(item);
+                });
+                
+
+                const openWindows = document.querySelectorAll('.window').length;
+                windowEl.style.left = `${190 + openWindows * 30}px`;
+                windowEl.style.top = `${190 + openWindows * 30}px`;
+                
+                windowEl.addEventListener('mousedown', () => setActiveWindow(windowEl), true);
+                const titleBar = windowEl.querySelector('.window-title-bar');
+                titleBar.addEventListener('mousedown', (e) => startDrag(e, windowEl));
+                windowEl.querySelector('.window-close-btn').addEventListener('click', () => {
+                    if (activeWindow === windowEl) activeWindow = null;
+                    windowEl.remove();
+                });
+
+                desktop.appendChild(windowEl);
+                setActiveWindow(windowEl);
+                selectFolder('Inbox');
+            };
 
             // --- Media Player ---
             function createMediaPlayer() {
